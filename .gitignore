@@ -3,6 +3,9 @@
 .vs/
 lhtrpg.code-workspace
 
+# copyright
+packs/
+
 # Node Modules
 node_modules/
 npm-debug.log
