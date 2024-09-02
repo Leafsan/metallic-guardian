@@ -42,9 +42,9 @@
   "packs": [],
   "packFolders": [],
   "socket": false,
-  "manifest": "Replace this with a link to the /latest release system.json so people can receive updates after they've installed the system",
-  "download": "This must link to a .zip file of the current version",
+  "manifest": "https://raw.githubusercontent.com/Leafsan/metallic-guardian/main/system.json",
+  "download": "https://github.com/Leafsan/metallic-guardian/releases/download/test/metallic-guardian.zip",
   "background": "systems/metallic-guardian/assets/anvil-impact.png",
-  "primaryTokenAttribute": "health",
-  "secondaryTokenAttribute": "power"
+  "primaryTokenAttribute": "HP",
+  "secondaryTokenAttribute": "FP"
 }
