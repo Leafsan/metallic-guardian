@@ -4,7 +4,10 @@ import { MetallicGuardianItem } from "./documents/item.mjs";
 import { MetallicGuardianCombat } from "./documents/metallicGuardianCombat.mjs";
 import { MetallicGuardianActiveEffect } from "./documents/metallicGuardianActiveEffect.mjs";
 // Import sheet classes.
-import { MetallicGuardianActorSheet } from "./sheets/actor-sheet.mjs";
+import { MetallicGuardianLinkageSheet } from "./sheets/actor-linkage-sheet.mjs";
+import { MetallicGuardianNPCSheet } from "./sheets/actor-npc-sheet.mjs";
+import { MetallicGuardianGuardianSheet } from "./sheets/actor-guardian-sheet.mjs";
+import { MetallicGuardianEnemySheet } from "./sheets/actor-enemy-sheet.mjs";
 import { MetallicGuardianItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
@@ -44,22 +47,22 @@ Hooks.once("init", function () {
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("metallic-guardian", MetallicGuardianActorSheet, {
+  Actors.registerSheet("metallic-guardian", MetallicGuardianLinkageSheet, {
     types: ["linkage"],
     makeDefault: true,
     label: "METALLIC_GUARDIAN.SheetLabels.Linkage",
   });
-  Actors.registerSheet("metallic-guardian", MetallicGuardianActorSheet, {
+  Actors.registerSheet("metallic-guardian", MetallicGuardianNPCSheet, {
     types: ["npc"],
     makeDefault: true,
     label: "METALLIC_GUARDIAN.SheetLabels.NPC",
   });
-  Actors.registerSheet("metallic-guardian", MetallicGuardianActorSheet, {
+  Actors.registerSheet("metallic-guardian", MetallicGuardianGuardianSheet, {
     types: ["guardian"],
     makeDefault: true,
     label: "METALLIC_GUARDIAN.SheetLabels.Guardian",
   });
-  Actors.registerSheet("metallic-guardian", MetallicGuardianActorSheet, {
+  Actors.registerSheet("metallic-guardian", MetallicGuardianEnemySheet, {
     types: ["enemy"],
     makeDefault: true,
     label: "METALLIC_GUARDIAN.SheetLabels.Enemy",

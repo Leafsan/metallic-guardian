@@ -235,7 +235,7 @@
       "human-armor",
       "guardian-weapon",
       "guardian-option",
-      "item",
+      "gear",
       "skill"
     ],
     "templates": {
@@ -290,18 +290,22 @@
     }
   },
   "human-weapon": {
-    "templates": ["base", "attack", "stat", "buyable"]
+    "templates": ["base", "attack", "stat", "buyable"],
+    "equipped": false
   },
   "human-armor": {
-    "templates": ["base", "defense", "stat", "buyable"]
+    "templates": ["base", "defense", "stat", "buyable"],
+    "equipped": false
   },
   "guardian-weapon": {
-    "templates": ["base", "attack", "defense", "stat", "buyable"]
+    "templates": ["base", "attack", "defense", "stat", "buyable"],
+    "equipped": false
   },
   "guardian-option": {
-    "templates": ["base", "defense", "stat", "buyable"]
+    "templates": ["base", "defense", "stat", "buyable"],
+    "equipped": false
   },
-  "item": {
+  "gear": {
     "templates": ["base", "buyable"],
     "timing": "",
     "quantity": 1

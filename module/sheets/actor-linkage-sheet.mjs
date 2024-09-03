@@ -7,26 +7,28 @@ import {
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class MetallicGuardianActorSheet extends ActorSheet {
+export class MetallicGuardianLinkageSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["metallic-guardian", "sheet", "actor"],
+      classes: ["metallic-guardian", "sheet", "actor", "linkage"],
+      template:
+        "systems/metallic-guardian/templates/actor/actor-linkage-sheet.hbs",
       width: 600,
       height: 600,
       tabs: [],
     });
   }
 
-  /** @override */
-  get template() {
-    return `systems/metallic-guardian/templates/actor/actor-${this.actor.type}-sheet.hbs`;
-  }
+  // /** @override */
+  // get template() {
+  //   return `systems/metallic-guardian/templates/actor/actor-${this.actor.type}-sheet.hbs`;
+  // }
 
   /* -------------------------------------------- */
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
@@ -43,24 +45,23 @@ export class MetallicGuardianActorSheet extends ActorSheet {
 
     // Prepare character data and items.
     if (actorData.type == "linkage") {
+      console.log("Preparing character data...");
       this._prepareItems(context);
       this._prepareCharacterData(context);
-    }
-
-    // Prepare NPC data and items.
-    if (actorData.type == "npc") {
-      this._prepareItems(context);
     }
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
 
+    // Enrich textarea content
+    context.enrichments = {
+      biography: await TextEditor.enrichHTML(context.system.biography, {
+        async: true,
+      }),
+    };
+
     // Prepare active effects
-    context.effects = prepareActiveEffectCategories(
-      // A generator that returns all effects stored on the actor
-      // as well as any items
-      this.actor.allApplicableEffects()
-    );
+    context.effects = prepareActiveEffectCategories(this.actor.effects);
 
     return context;
   }
@@ -72,12 +73,7 @@ export class MetallicGuardianActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
-    // Handle ability scores.
-    for (let [k, v] of Object.entries(context.system.abilities)) {
-      v.label = game.i18n.localize(CONFIG.METALLIC_GUARDIAN.abilities[k]) ?? k;
-    }
-  }
+  _prepareCharacterData(context) {}
 
   /**
    * Organize and classify Items for Character sheets.
@@ -88,44 +84,41 @@ export class MetallicGuardianActorSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
-    const gear = [];
-    const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+    const skills = [];
+
+    const itemsEquippedWeapon = [];
+    const itemsEquippedArmor = [];
+    const itemsWeapon = [];
+    const itemsArmor = [];
+    const itemsGear = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      // Append to gear.
-      if (i.type === "item") {
-        gear.push(i);
-      }
-      // Append to features.
-      else if (i.type === "feature") {
-        features.push(i);
-      }
-      // Append to spells.
-      else if (i.type === "spell") {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
+      i.img = i.img || DEFAULT_TOKEN;
+
+      if (i.type === "skill") {
+        skills.push(i);
+      } else if (i.system.equipped === true && i.type === "human-weapon") {
+        itemsEquippedWeapon.push(i);
+      } else if (i.system.equipped === true && i.type === "human-armor") {
+        itemsEquippedArmor.push(i);
+      } else if (i.system.equipped === false && i.type === "human-weapon") {
+        itemsWeapon.push(i);
+      } else if (i.system.equipped === false && i.type === "human-armor") {
+        itemsArmor.push(i);
+      } else if (i.type === "gear") {
+        itemsGear.push(i);
       }
     }
 
     // Assign and return
-    context.gear = gear;
-    context.features = features;
-    context.spells = spells;
+    context.skills = skills;
+    context.items = {
+      equipped: {
+        weapons: itemsEquippedWeapon,
+        armor: itemsEquippedArmor,
+      },
+    };
   }
 
   /* -------------------------------------------- */
