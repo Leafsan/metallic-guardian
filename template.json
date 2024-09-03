@@ -52,6 +52,10 @@
             "value": 0,
             "mod": 0
           },
+          "initiative": {
+            "value": 0,
+            "mod": 0
+          },
           "field": {
             "value": 0,
             "mod": 0
@@ -110,6 +114,64 @@
           "house": "",
           "cover": ""
         }
+      },
+      "bad-status": {
+        "bad-status": {
+          "pressure": false,
+          "discompose": false,
+          "erosion": 0,
+          "capture": false,
+          "paralysis": false,
+          "speed-down": false,
+          "hatred": false,
+          "power-down": false
+        }
+      },
+      "move-status": {
+        "move-status": {
+          "flight": false,
+          "rush": false,
+          "high-mobility": false,
+          "heat-resistance": false,
+          "underground": false,
+          "entry": false
+        }
+      },
+      "defense": {
+        "defense": {
+          "slash": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "pierce": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "blunt": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "fire": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "ice": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "electric": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "light": {
+            "mod": 0,
+            "barrier": 0
+          },
+          "dark": {
+            "mod": 0,
+            "barrier": 0
+          }
+        }
       }
     },
     "linkage": {
@@ -118,7 +180,9 @@
         "attributes",
         "battle-stats",
         "class",
-        "personality"
+        "personality",
+        "bad-status",
+        "defense"
       ],
       "level": 3,
       "exp": 0,
@@ -129,29 +193,100 @@
       "cover": ""
     },
     "guardian": {
-      "templates": ["base", "battle-stats"]
+      "templates": ["base", "battle-stats", "move-status", "defense"],
+      "size": ""
     },
-    "enemy": {}
+    "enemy": {
+      "templates": [
+        "base",
+        "attributes",
+        "battle-stats",
+        "bad-status",
+        "move-status"
+      ],
+      "level": 1,
+      "type": "",
+      "size": ""
+    }
   },
   "Item": {
-    "types": ["item", "feature", "spell"],
+    "types": [
+      "human-weapon",
+      "human-armor",
+      "guardian-weapon",
+      "guardian-option",
+      "item",
+      "skill"
+    ],
     "templates": {
       "base": {
+        "type": "",
         "description": ""
+      },
+      "buyable": {
+        "buy-difficulty": 0,
+        "price": 0
+      },
+      "action": {
+        "level": 1,
+        "timing": "",
+        "target": "",
+        "range": "",
+        "cost": ""
+      },
+      "stat": {
+        "accuracy": 0,
+        "evasion": 0,
+        "artillery": 0,
+        "defense": 0,
+        "initiative": 0
+      },
+      "attack": {
+        "main": {
+          "equipable": false,
+          "type": "",
+          "damage": 0
+        },
+        "sub": {
+          "equipable": false,
+          "type": "",
+          "damage": 0
+        },
+        "cost": "",
+        "range": 0
+      },
+      "defense": {
+        "defense": {
+          "slash": 0,
+          "pierce": 0,
+          "blunt": 0,
+          "fire": 0,
+          "ice": 0,
+          "electric": 0,
+          "light": 0,
+          "dark": 0
+        }
       }
-    },
-    "item": {
-      "templates": ["base"],
-      "quantity": 1,
-      "weight": 0,
-      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
-    },
-    "feature": {
-      "templates": ["base"]
-    },
-    "spell": {
-      "templates": ["base"],
-      "spellLevel": 1
     }
+  },
+  "human-weapon": {
+    "templates": ["base", "attack", "stat", "buyable"]
+  },
+  "human-armor": {
+    "templates": ["base", "defense", "stat", "buyable"]
+  },
+  "guardian-weapon": {
+    "templates": ["base", "attack", "defense", "stat", "buyable"]
+  },
+  "guardian-option": {
+    "templates": ["base", "defense", "stat", "buyable"]
+  },
+  "item": {
+    "templates": ["base", "buyable"],
+    "timing": "",
+    "quantity": 1
+  },
+  "skill": {
+    "templates": ["base", "action"]
   }
 }
