@@ -1,107 +1,75 @@
-/**
- * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
- * @extends {Actor}
- */
 export class MetallicGuardianActor extends Actor {
   /** @override */
   prepareData() {
-    // Prepare data for the actor. Calling the super version of this executes
-    // the following, in order: data reset (to clear active effects),
-    // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
-    // prepareDerivedData().
     super.prepareData();
   }
 
   /** @override */
   prepareBaseData() {
-    // Data modifications in this step occur before processing embedded
-    // documents or derived data.
+    // 필요한 경우 여기서 기본 데이터 초기화
   }
 
-  /**
-   * @override
-   * Augment the actor source data with additional dynamic data. Typically,
-   * you'll want to handle most of your calculated/derived data in this step.
-   * Data calculated in this step should generally not exist in template.json
-   * (such as ability modifiers rather than ability scores) and should be
-   * available both inside and outside of character sheets (such as if an actor
-   * is queried and has a roll executed directly from it).
-   */
+  /** @override */
   prepareDerivedData() {
     const actorData = this;
-    const systemData = actorData.system;
+    const systemData = actorData.system || {}; // undefined 방지를 위해 기본값 설정
     const flags = actorData.flags.metallicguardian || {};
 
-    // Make separate methods for each Actor type (character, npc, etc.) to keep
-    // things organized.
+    // Make separate methods for each Actor type to keep things organized.
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
   }
 
-  /**
-   * Prepare Character type specific data
-   */
   _prepareCharacterData(actorData) {
     if (actorData.type !== "linkage") return;
 
-    // Make modifications to data here. For example:
-    const systemData = actorData.system;
+    const systemData = actorData.system || {}; // undefined 방지를 위해 기본값 설정
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
+    if (!systemData.abilities) return; // abilities가 undefined인 경우를 처리
+
     for (let [key, ability] of Object.entries(systemData.abilities)) {
-      // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
+      if (ability.value !== undefined) {
+        ability.mod = Math.floor((ability.value - 10) / 2);
+      }
     }
   }
 
-  /**
-   * Prepare NPC type specific data.
-   */
   _prepareNpcData(actorData) {
     if (actorData.type !== "npc") return;
 
-    // Make modifications to data here. For example:
-    const systemData = actorData.system;
-    systemData.xp = systemData.cr * systemData.cr * 100;
+    const systemData = actorData.system || {}; // undefined 방지를 위해 기본값 설정
+
+    // CR이 undefined일 경우를 처리
+    if (systemData.cr !== undefined) {
+      systemData.xp = systemData.cr * systemData.cr * 100;
+    }
   }
 
-  /**
-   * Override getRollData() that's supplied to rolls.
-   */
   getRollData() {
-    // Starts off by populating the roll data with `this.system`
     const data = { ...super.getRollData() };
 
-    // Prepare character roll data.
     this._getCharacterRollData(data);
     this._getNpcRollData(data);
 
     return data;
   }
 
-  /**
-   * Prepare character roll data.
-   */
   _getCharacterRollData(data) {
     if (this.type !== "linkage") return;
 
-    // Copy the ability scores to the top level, so that rolls can use
-    // formulas like `@str.mod + 4`.
     if (data.abilities) {
       for (let [k, v] of Object.entries(data.abilities)) {
-        data[k] = foundry.utils.deepClone(v);
+        if (v) {
+          data[k] = foundry.utils.deepClone(v); // v가 undefined인 경우를 방지
+        }
       }
     }
 
-    // Add level for easier access, or fall back to 0.
-    if (data.attributes.level) {
+    if (data.attributes && data.attributes.level) {
       data.lvl = data.attributes.level.value ?? 0;
     }
   }
 
-  /**
-   * Prepare NPC roll data.
-   */
   _getNpcRollData(data) {
     if (this.type !== "npc") return;
 
