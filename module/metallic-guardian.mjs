@@ -1,6 +1,8 @@
 // Import document classes.
 import { MetallicGuardianActor } from "./documents/actor.mjs";
 import { MetallicGuardianItem } from "./documents/item.mjs";
+import { MetallicGuardianCombat } from "./documents/metallicGuardianCombat.mjs";
+import { MetallicGuardianActiveEffect } from "./documents/metallicGuardianActiveEffect.mjs";
 // Import sheet classes.
 import { MetallicGuardianActorSheet } from "./sheets/actor-sheet.mjs";
 import { MetallicGuardianItemSheet } from "./sheets/item-sheet.mjs";

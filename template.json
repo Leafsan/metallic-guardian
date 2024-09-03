@@ -186,7 +186,12 @@
       ],
       "level": 3,
       "exp": 0,
-      "equip-point": 50
+      "equip-point": 50,
+      "HP": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      }
     },
     "npc": {
       "templates": ["base"],
@@ -194,7 +199,22 @@
     },
     "guardian": {
       "templates": ["base", "battle-stats", "move-status", "defense"],
-      "size": ""
+      "size": "",
+      "FP": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      },
+      "HP": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      },
+      "EN": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      }
     },
     "enemy": {
       "templates": [
