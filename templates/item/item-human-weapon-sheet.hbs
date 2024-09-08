@@ -1,0 +1,144 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+    </div>
+  </header>
+
+    {{> "systems/metallic-guardian/templates/item/parts/item-stats.hbs"}}
+
+    <section class="sheet-stats grid grid-4col">
+
+    <!-- 무기종류 -->
+    <div class="stat-label">종류</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.weapon-type"
+        value="{{system.weapon-type}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 사정거리 -->
+    <div class="stat-label">사정거리</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.range"
+        value="{{system.range}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 부위 -->
+    <div class="stat-label">부위</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.part"
+        value="{{system.part}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 소모 -->
+    <div class="stat-label">소모</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.cost"
+        value="{{system.cost}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 주공격 -->
+    <div class="grid-span-2 grid-2col">
+        <div class="stat-header grid-span-2">주공격</div>
+        <div class="stat-value">
+            <input
+            type="text"
+            name="system.main.type"
+            value="{{system.main.type}}"
+            data-dtype="String"
+            placeholder="피해유형"
+            />
+        </div>
+        <div class="stat-value">
+            <input
+            type="number"
+            name="system.main.damage"
+            value="{{system.main.damage}}"
+            />
+        </div>
+    </div>
+
+    <!-- 부공격 -->
+    <div class="grid-span-2 grid-2col">
+        <div class="stat-header grid-span-2">부공격</div>
+        <div class="stat-value">
+            <input
+            type="text"
+            name="system.sub.type"
+            value="{{system.sub.type}}"
+            data-dtype="String"
+            placeholder="피해유형"
+            />
+        </div>
+        <div class="stat-value">
+            <input
+            type="number"
+            name="system.sub.damage"
+            value="{{system.sub.damage}}"
+            />
+        </div>
+    </div>
+
+    <!-- 구입난이도 -->
+    <div class="stat-label">구입난이도</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.buy-difficulty"
+        value="{{system.buy-difficulty}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 상비포인트 -->
+    <div class="stat-label">상비포인트</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.price"
+        value="{{system.price}}"
+        data-dtype="String"
+        />
+    </div>
+    </section>
+
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">효과</a>
+    <a class="item" data-tab="effects">이펙트</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+    {{!-- TinyMCE를 통한 텍스트 입력 부분 --}}
+    {{editor enrichments.description target="system.description" rollData=rollData button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{!-- As you add new fields, add them in here! --}}
+      {{> "systems/metallic-guardian/templates/item/parts/item-effects.hbs"}}
+    </div>
+  </section>
+</form>

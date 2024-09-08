@@ -264,13 +264,12 @@
         }
       },
       "attack": {
+        "part": "",
         "main": {
-          "equipable": false,
           "type": "",
           "damage": 0
         },
         "sub": {
-          "equipable": false,
           "type": "",
           "damage": 0
         },
@@ -293,6 +292,7 @@
   },
   "human-weapon": {
     "templates": ["base", "attack", "stat", "buyable"],
+    "weapon-type": "",
     "equipped": false
   },
   "human-armor": {
@@ -305,6 +305,12 @@
   },
   "guardian-option": {
     "templates": ["base", "defense", "stat", "buyable"],
+    "battle-status": {
+      "field": 0,
+      "response": 0,
+      "damage": 0,
+      "speed": 0
+    },
     "equipped": false
   },
   "gear": {
