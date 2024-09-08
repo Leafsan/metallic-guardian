@@ -16,7 +16,13 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
         "systems/metallic-guardian/templates/actor/actor-linkage-sheet.hbs",
       width: 600,
       height: 600,
-      tabs: [],
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "bios",
+        },
+      ],
     });
   }
 
@@ -98,14 +104,18 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
 
       if (i.type === "skill") {
         skills.push(i);
-      } else if (i.system.equipped === true && i.type === "human-weapon") {
-        itemsEquippedWeapon.push(i);
-      } else if (i.system.equipped === true && i.type === "human-armor") {
-        itemsEquippedArmor.push(i);
-      } else if (i.system.equipped === false && i.type === "human-weapon") {
-        itemsWeapon.push(i);
-      } else if (i.system.equipped === false && i.type === "human-armor") {
-        itemsArmor.push(i);
+      } else if (i.type === "human-weapon") {
+        if (i.system.equipped === true) {
+          itemsEquippedWeapon.push(i);
+        } else {
+          itemsWeapon.push(i);
+        }
+      } else if (i.type === "human-armor") {
+        if (i.system.equipped === true) {
+          itemsEquippedArmor.push(i);
+        } else {
+          itemsArmor.push(i);
+        }
       } else if (i.type === "gear") {
         itemsGear.push(i);
       }
@@ -118,6 +128,9 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
         weapons: itemsEquippedWeapon,
         armor: itemsEquippedArmor,
       },
+      weapons: itemsWeapon,
+      armor: itemsArmor,
+      gear: itemsGear,
     };
   }
 

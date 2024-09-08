@@ -1,116 +1,454 @@
-{{!-- <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
-  {{!-- Sheet Header --}}
-  <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
-    <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
-      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
-      use both the "grid" and "grid-Ncol" class where "N" can be any number
-      from 1 to 12 and will create that number of columns.  --}}
-      <div class="resources grid grid-3col">
+  {{! Sheet Header }}
+  <header
+    class="sheet-header grid grid-3col"
+    style="grid-template-columns: 150px 1fr 1fr; gap: 20px; align-items: start;"
+  >
 
-        {{!-- "flex-group-center" is also defined in the _grid.scss file
-        and it will add a small amount of padding, a border, and will
-        center all of its child elements content and text. --}}
+    {{! 이미지 영역 }}
+    <div
+      class="profile-img-container"
+      style="display: flex; justify-content: center; align-items: center;"
+    >
+      <img
+        class="profile-img"
+        src="{{actor.img}}"
+        data-edit="img"
+        title="{{actor.name}}"
+        height="150"
+        width="150"
+      />
+    </div>
+
+    {{! 이름, HP, 경험치, 상비화 포인트 영역 }}
+    <div class="header-fields flexcol" style="gap: 10px;">
+      <div class="name-level flexcol" style="gap: 5px;">
+        <label for="name" class="resource-label">이름</label>
+        <input
+          name="name"
+          type="text"
+          value="{{actor.name}}"
+          placeholder="Name"
+          style="width: 100%;"
+        />
+      </div>
+
+      {{! HP 영역 }}
+      <div class="hp-container flexcol" style="gap: 10px;">
         <div class="resource flex-group-center">
-          <label for="system.health.value" class="resource-label">Health</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number"/>
-          <span> / </span>
-          <input type="text" name="system.health.max" value="{{system.health.max}}" data-dtype="Number"/>
+          <label for="system.HP.value" class="resource-label">HP</label>
+          <div
+            class="resource-content flexrow flex-center flex-between"
+            style="gap: 5px;"
+          >
+            <input
+              type="text"
+              name="system.HP.value"
+              value="{{system.HP.value}}"
+              data-dtype="Number"
+              style="width: 50px;"
+            />
+            <span> / </span>
+            <input
+              type="text"
+              name="system.HP.max"
+              value="{{system.HP.max}}"
+              data-dtype="Number"
+              style="width: 50px;"
+            />
+          </div>
+        </div>
+      </div>
+
+      {{! 경험치 영역 }}
+      <div class="xp-container flexcol" style="gap: 10px;">
+        <div class="resource flex-group-center">
+          <label for="system.exp" class="resource-label">경험치</label>
+          <input
+            type="text"
+            name="system.exp"
+            value="{{system.exp}}"
+            data-dtype="Number"
+            style="width: 100px;"
+          />
+        </div>
+      </div>
+
+      {{! 상비화 포인트 (equip-point) 영역 }}
+      <div class="equip-point-container flexcol" style="gap: 10px;">
+        <div class="resource flex-group-center">
+          <label for="system.equip-point" class="resource-label">상비화 포인트</label>
+          <div
+            class="resource-content flexrow flex-center flex-between"
+            style="gap: 10px;"
+          >
+            <input
+              type="text"
+              name="system.equip-point.used"
+              value="{{system.equip-point.used}}"
+              data-dtype="Number"
+              style="width: 50px;"
+              readonly
+            />
+            <span> / </span>
+            <input
+              type="text"
+              name="system.equip-point.remaining"
+              value="{{system.equip-point.remaining}}"
+              data-dtype="Number"
+              style="width: 100px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{! 클래스 및 레벨 영역 (우측 배치) }}
+    <div class="class-level-fields flexcol" style="gap: 10px;">
+      {{! 레벨과 레벨 수치 입력란을 나란히 배치 }}
+      <div
+        class="level-container flexrow"
+        style="gap: 10px; align-items: center;"
+      >
+        <label
+          for="system.attributes.level.value"
+          class="resource-label"
+          style="margin-bottom: 0;"
+        >레벨</label>
+        <input
+          type="text"
+          name="system.attributes.level.value"
+          value="{{system.attributes.level.value}}"
+          data-dtype="Number"
+          style="width: 100px;"
+        />
+      </div>
+
+      {{! 클래스와 클래스 레벨을 나란히 배치 }}
+      <div class="class-list flexcol" style="gap: 10px;">
+        <div class="flexcol" style="align-items: flex-start;">
+          <label
+            for="system.class.first.name"
+            style="margin-bottom: 5px;"
+          >클래스 1</label>
+          <div class="flexrow" style="gap: 10px;">
+            <input
+              type="text"
+              name="system.class.first.name"
+              value="{{system.class.first.name}}"
+              placeholder="Class 1"
+              style="flex-grow: 1;"
+            />
+            <input
+              type="text"
+              name="system.class.first.level"
+              value="{{system.class.first.level}}"
+              placeholder="LV"
+              style="width: 50px;"
+            />
           </div>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.power.value" class="resource-label">Power</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.power.value" value="{{system.power.value}}" data-dtype="Number"/>
-          <span> / </span>
-          <input type="text" name="system.power.max" value="{{system.power.max}}" data-dtype="Number"/>
+        <div class="flexcol" style="align-items: flex-start;">
+          <label
+            for="system.class.second.name"
+            style="margin-bottom: 5px;"
+          >클래스 2</label>
+          <div class="flexrow" style="gap: 10px;">
+            <input
+              type="text"
+              name="system.class.second.name"
+              value="{{system.class.second.name}}"
+              placeholder="Class 2"
+              style="flex-grow: 1;"
+            />
+            <input
+              type="text"
+              name="system.class.second.level"
+              value="{{system.class.second.level}}"
+              placeholder="LV"
+              style="width: 50px;"
+            />
           </div>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">Level</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.attributes.level.value" value="{{system.attributes.level.value}}" data-dtype="Number"/>
+        <div class="flexcol" style="align-items: flex-start;">
+          <label
+            for="system.class.third.name"
+            style="margin-bottom: 5px;"
+          >클래스 3</label>
+          <div class="flexrow" style="gap: 10px;">
+            <input
+              type="text"
+              name="system.class.third.name"
+              value="{{system.class.third.name}}"
+              placeholder="Class 3"
+              style="flex-grow: 1;"
+            />
+            <input
+              type="text"
+              name="system.class.third.level"
+              value="{{system.class.third.level}}"
+              placeholder="LV"
+              style="width: 50px;"
+            />
           </div>
         </div>
-
       </div>
     </div>
   </header>
 
-  {{!-- Sheet Tab Navigation --}}
+  {{! 능력치 테이블 영역 }}
+  <section
+    class="attributes-container grid grid-6col"
+    style="grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;"
+  >
+
+    {{! 능력치 헤더 }}
+    <div class="attribute-header">체력</div>
+    <div class="attribute-header">반사</div>
+    <div class="attribute-header">지각</div>
+    <div class="attribute-header">이성</div>
+    <div class="attribute-header">의지</div>
+    <div class="attribute-header">행운</div>
+
+    {{! 능력치 값 표시 영역 }}
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.str.value"
+        value="{{system.attributes.str.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.dex.value"
+        value="{{system.attributes.dex.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.per.value"
+        value="{{system.attributes.per.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.int.value"
+        value="{{system.attributes.int.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.wil.value"
+        value="{{system.attributes.wil.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.luk.value"
+        value="{{system.attributes.luk.value}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+
+    {{! 능력치 수정치 영역 }}
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.str.modifier.total"
+        value="{{system.attributes.str.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.dex.modifier.total"
+        value="{{system.attributes.dex.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.per.modifier.total"
+        value="{{system.attributes.per.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.int.modifier.total"
+        value="{{system.attributes.int.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.wil.modifier.total"
+        value="{{system.attributes.wil.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.luk.modifier.total"
+        value="{{system.attributes.luk.modifier.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+      />
+    </div>
+
+  </section>
+
+  {{! 판정 버튼 영역 }}
+  <section class="roll-buttons flexrow" style="gap: 10px; padding-top: 20px;">
+
+    {{! 명중판정 버튼 }}
+    <div class="roll-button">
+      <button
+        type="button"
+        class="rollable"
+        data-action="accuracyRoll"
+      >명중판정</button>
+      <input
+        type="number"
+        name="system.accuracy.total"
+        value="{{system.accuracy.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+        readonly
+      />
+    </div>
+
+    {{! 회피판정 버튼 }}
+    <div class="roll-button">
+      <button
+        type="button"
+        class="rollable"
+        data-action="evasionRoll"
+      >회피판정</button>
+      <input
+        type="number"
+        name="system.evasion.total"
+        value="{{system.evasion.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+        readonly
+      />
+    </div>
+
+    {{! 포격판정 버튼 }}
+    <div class="roll-button">
+      <button
+        type="button"
+        class="rollable"
+        data-action="artilleryRoll"
+      >포격판정</button>
+      <input
+        type="number"
+        name="system.artillery.total"
+        value="{{system.artillery.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+        readonly
+      />
+    </div>
+
+    {{! 방벽판정 버튼 }}
+    <div class="roll-button">
+      <button
+        type="button"
+        class="rollable"
+        data-action="defenseRoll"
+      >방벽판정</button>
+      <input
+        type="number"
+        name="system.defense.total"
+        value="{{system.defense.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+        readonly
+      />
+    </div>
+
+    {{! 행동력(이니셔티브) 버튼 }}
+    <div class="roll-button">
+      <button
+        type="button"
+        class="rollable"
+        data-action="initiativeRoll"
+      >행동력</button>
+      <input
+        type="number"
+        name="system.initiative.total"
+        value="{{system.initiative.total}}"
+        data-dtype="Number"
+        style="width: 50px;"
+        readonly
+      />
+    </div>
+
+  </section>
+
+  {{! Sheet Tab Navigation }}
   <nav class="sheet-tabs tabs" data-group="primary">
-    {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="features">Features</a>
-    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="bios">Bios</a>
+    <a class="item" data-tab="classes">Class</a>
     <a class="item" data-tab="items">Items</a>
-    <a class="item" data-tab="spells">Spells</a>
+    <a class="item" data-tab="actions">Actions</a>
     <a class="item" data-tab="effects">Effects</a>
   </nav>
 
-  {{!-- Sheet Body --}}
+  {{! Sheet Body }}
   <section class="sheet-body">
-
-    {{!-- Owned Features Tab --}}
-    <div class="tab features" data-group="primary" data-tab="features">
-      <section class="grid grid-3col">
-        <aside class="sidebar">
-
-          {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
-          use both the "grid" and "grid-Ncol" class where "N" can be any number
-          from 1 to 12 and will create that number of columns.  --}}
-          <div class="abilities flexcol">
-            {{#each system.abilities as |ability key|}}
-            <div class="ability flexrow flex-group-center">
-              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
-              <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span>
-            </div>
-            {{/each}}
-          </div>
-        </aside>
-
-        {{!-- For the main features list, span the right two columns --}}
-        <section class="main grid-span-2">
-          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/metallic-guardian/templates/actor/parts/actor-features.hbs"}}
-        </section>
-
-      </section>
+    {{! Tabs content will go here }}
+    <div class="tab bios" data-group="primary" data-tab="bios">
+      {{> "systems/metallic-guardian/templates/actor/parts/actor-bios.hbs"}}
     </div>
 
-    {{!-- Biography Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="description">
-      {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
-      {{editor system.biography target="system.biography" rollData=rollData button=true owner=owner editable=editable}}
+    <div class="tab classes" data-group="primary" data-tab="classes">
+      {{> "systems/metallic-guardian/templates/actor/parts/actor-classes.hbs"}}
     </div>
 
-    {{!-- Owned Items Tab --}}
     <div class="tab items" data-group="primary" data-tab="items">
-       {{> "systems/metallic-guardian/templates/actor/parts/actor-items.hbs"}}
+      {{> "systems/metallic-guardian/templates/actor/parts/actor-items.hbs"}}
     </div>
 
-    {{!-- Owned Spells Tab --}}
-    <div class="tab spells" data-group="primary" data-tab="spells">
-      {{> "systems/metallic-guardian/templates/actor/parts/actor-spells.hbs"}}
+    <div class="tab actions" data-group="primary" data-tab="actions">
+      {{> "systems/metallic-guardian/templates/actor/parts/actor-actions.hbs"}}
     </div>
 
-    {{!-- Active Effects Tab --}}
-    <div class="tab effects flexcol" data-group="primary" data-tab="effects">
+    <div class="tab effects" data-group="primary" data-tab="effects">
       {{> "systems/metallic-guardian/templates/actor/parts/actor-effects.hbs"}}
     </div>
-
   </section>
 </form>
 
 {{log system}}
- --}}
-
-
-<div>
-  asdf
-</div>
