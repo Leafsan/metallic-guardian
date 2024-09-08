@@ -119,7 +119,7 @@
         <input
           type="text"
           name="system.attributes.level.value"
-          value="{{system.attributes.level.value}}"
+          value="{{system.level}}"
           data-dtype="Number"
           style="width: 100px;"
         />
@@ -128,10 +128,6 @@
       {{! 클래스와 클래스 레벨을 나란히 배치 }}
       <div class="class-list flexcol" style="gap: 10px;">
         <div class="flexcol" style="align-items: flex-start;">
-          <label
-            for="system.class.first.name"
-            style="margin-bottom: 5px;"
-          >클래스 1</label>
           <div class="flexrow" style="gap: 10px;">
             <input
               type="text"
@@ -151,10 +147,6 @@
         </div>
 
         <div class="flexcol" style="align-items: flex-start;">
-          <label
-            for="system.class.second.name"
-            style="margin-bottom: 5px;"
-          >클래스 2</label>
           <div class="flexrow" style="gap: 10px;">
             <input
               type="text"
@@ -174,10 +166,6 @@
         </div>
 
         <div class="flexcol" style="align-items: flex-start;">
-          <label
-            for="system.class.third.name"
-            style="margin-bottom: 5px;"
-          >클래스 3</label>
           <div class="flexrow" style="gap: 10px;">
             <input
               type="text"
@@ -339,8 +327,8 @@
       >명중판정</button>
       <input
         type="number"
-        name="system.accuracy.total"
-        value="{{system.accuracy.total}}"
+        name="system.battle-stats.accuracy.total"
+        value="{{system.battle-stats.accuracy.total}}"
         data-dtype="Number"
         style="width: 50px;"
         readonly
@@ -356,8 +344,8 @@
       >회피판정</button>
       <input
         type="number"
-        name="system.evasion.total"
-        value="{{system.evasion.total}}"
+        name="system.battle-stats.evasion.total"
+        value="{{system.battle-stats.evasion.total}}"
         data-dtype="Number"
         style="width: 50px;"
         readonly
@@ -373,8 +361,8 @@
       >포격판정</button>
       <input
         type="number"
-        name="system.artillery.total"
-        value="{{system.artillery.total}}"
+        name="system.battle-stats.artillery.total"
+        value="{{system.battle-stats.artillery.total}}"
         data-dtype="Number"
         style="width: 50px;"
         readonly
@@ -390,8 +378,8 @@
       >방벽판정</button>
       <input
         type="number"
-        name="system.defense.total"
-        value="{{system.defense.total}}"
+        name="system.battle-stats.defense.total"
+        value="{{system.battle-stats.defense.total}}"
         data-dtype="Number"
         style="width: 50px;"
         readonly
@@ -407,8 +395,8 @@
       >행동력</button>
       <input
         type="number"
-        name="system.initiative.total"
-        value="{{system.initiative.total}}"
+        name="system.battle-stats.initiative.total"
+        value="{{system.battle-stats.initiative.total}}"
         data-dtype="Number"
         style="width: 50px;"
         readonly

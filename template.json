@@ -186,7 +186,10 @@
       ],
       "level": 3,
       "exp": 0,
-      "equip-point": 50,
+      "equip-point": {
+        "used": 0,
+        "remaining": 50
+      },
       "HP": {
         "value": 0,
         "max": 0,

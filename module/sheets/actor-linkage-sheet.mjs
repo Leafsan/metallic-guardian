@@ -50,11 +50,9 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     context.flags = actorData.flags;
 
     // Prepare character data and items.
-    if (actorData.type == "linkage") {
-      console.log("Preparing character data...");
-      this._prepareItems(context);
-      this._prepareCharacterData(context);
-    }
+    console.log("Preparing character data...");
+    this._prepareItems(context);
+    this._prepareCharacterData(context);
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
