@@ -1,7 +1,7 @@
 import {
   onManageActiveEffect,
   prepareActiveEffectCategories,
-} from '../helpers/effects.mjs';
+} from "../helpers/effects.mjs";
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -11,14 +11,14 @@ export class MetallicGuardianItemSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ['metallic-guardian', 'sheet', 'item'],
+      classes: ["metallic-guardian", "sheet", "item"],
       width: 520,
       height: 480,
       tabs: [
         {
-          navSelector: '.sheet-tabs',
-          contentSelector: '.sheet-body',
-          initial: 'description',
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "description",
         },
       ],
     });
@@ -26,7 +26,7 @@ export class MetallicGuardianItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    const path = 'systems/metallic-guardian/templates/item';
+    const path = "systems/metallic-guardian/templates/item";
     // Return a single sheet for all item types.
     // return `${path}/item-sheet.hbs`;
 
@@ -38,7 +38,7 @@ export class MetallicGuardianItemSheet extends ItemSheet {
   /* -------------------------------------------- */
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve base data structure.
     const context = super.getData();
 
@@ -55,6 +55,12 @@ export class MetallicGuardianItemSheet extends ItemSheet {
     // Prepare active effects for easier access
     context.effects = prepareActiveEffectCategories(this.item.effects);
 
+    context.enrichments = {
+      description: await TextEditor.enrichHTML(context.system.description, {
+        async: true,
+      }),
+    };
+
     return context;
   }
 
@@ -70,7 +76,7 @@ export class MetallicGuardianItemSheet extends ItemSheet {
     // Roll handlers, click handlers, etc. would go here.
 
     // Active Effect management
-    html.on('click', '.effect-control', (ev) =>
+    html.on("click", ".effect-control", (ev) =>
       onManageActiveEffect(ev, this.item)
     );
   }

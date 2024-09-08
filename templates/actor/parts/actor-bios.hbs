@@ -1,3 +1,90 @@
-<div>
-  <h2>Biographies</h2>
-</div>
+<section class="bios-section grid grid-3col">
+
+  <!-- 라이프패스: 가로 배열 -->
+  <div class="lifepaths-section flexcol grid-span-3">
+    <div class="section-header">라이프패스</div>
+    <div class="flexrow lifepaths-row">
+      <div class="lifepath-item">
+        <label for="system.personality.life-paths.birth">출신</label>
+        <textarea
+          name="system.personality.life-paths.birth"
+        >{{system.personality.life-paths.birth}}</textarea>
+      </div>
+      <div class="lifepath-item">
+        <label for="system.personality.life-paths.experience">경험</label>
+        <textarea
+          name="system.personality.life-paths.experience"
+        >{{system.personality.life-paths.experience}}</textarea>
+      </div>
+      <div class="lifepath-item">
+        <label for="system.personality.life-paths.meeting">해후</label>
+        <textarea
+          name="system.personality.life-paths.meeting"
+        >{{system.personality.life-paths.meeting}}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 영역: 미션, 재산 포인트, 라이프 스타일, 주택, 커넥션 -->
+  <div class="fullwidth-section flexcol grid-span-2">
+
+    <!-- 미션 -->
+    <div class="section-header">미션</div>
+    <div class="flexcol">
+      <input
+        type="text"
+        name="system.personality.mission.first"
+        value="{{system.personality.mission.first}}"
+      />
+      <input
+        type="text"
+        name="system.personality.mission.second"
+        value="{{system.personality.mission.second}}"
+      />
+    </div>
+
+    <!-- 커넥션 -->
+    <div class="section-header">커넥션</div>
+    <div class="flexrow">
+      <input
+        type="text"
+        name="system.personality.connection.name"
+        placeholder="커넥션"
+        value="{{system.personality.connection.name}}"
+      />
+      <input
+        type="text"
+        name="system.personality.connection.relationship"
+        placeholder="관계"
+        value="{{system.personality.connection.relationship}}"
+      />
+    </div>
+  </div>
+  <div class="fullwidth-section flexcol">
+    <!-- 재산 포인트 -->
+    <div class="section-header">재산 포인트</div>
+    <input
+      type="text"
+      name="system.personality.wealth-point"
+      value="{{system.personality.wealth-point}}"
+    />
+
+    <!-- 라이프 스타일 -->
+    <div class="section-header">라이프 스타일</div>
+    <input
+      type="text"
+      name="system.personality.life-style"
+      value="{{system.personality.life-style}}"
+    />
+
+    <!-- 주택 -->
+    <div class="section-header">주택</div>
+    <input
+      type="text"
+      name="system.personality.house"
+      value="{{system.personality.house}}"
+    />
+
+  </div>
+
+</section>

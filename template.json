@@ -255,11 +255,13 @@
         "cost": ""
       },
       "stat": {
-        "accuracy": 0,
-        "evasion": 0,
-        "artillery": 0,
-        "defense": 0,
-        "initiative": 0
+        "battle-stats": {
+          "accuracy": 0,
+          "evasion": 0,
+          "artillery": 0,
+          "defense": 0,
+          "initiative": 0
+        }
       },
       "attack": {
         "main": {
