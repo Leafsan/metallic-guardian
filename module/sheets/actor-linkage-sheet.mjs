@@ -44,10 +44,11 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor;
 
-    console.log("Actor Sheet Data:", actorData);
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
+
+    context.items = this.actor.items.toObject(); // Fetch all actor's items
 
     // Prepare character data and items.
     console.log("Preparing character data...");
@@ -66,6 +67,9 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
 
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
+
+    console.log("Actor Data:", actorData);
+    console.log("Context Data:", context);
 
     return context;
   }

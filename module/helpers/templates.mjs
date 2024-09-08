@@ -6,7 +6,7 @@
 export const preloadHandlebarsTemplates = async function () {
   return loadTemplates([
     // Actor partials.
-    "systems/metallic-guardian/templates/actor/parts/actor-actions.hbs",
+    "systems/metallic-guardian/templates/actor/parts/actor-skills.hbs",
     "systems/metallic-guardian/templates/actor/parts/actor-bios.hbs",
     "systems/metallic-guardian/templates/actor/parts/actor-classes.hbs",
     "systems/metallic-guardian/templates/actor/parts/actor-items.hbs",
