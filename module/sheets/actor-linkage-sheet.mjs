@@ -14,8 +14,9 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
       classes: ["metallic-guardian", "sheet", "actor", "linkage"],
       template:
         "systems/metallic-guardian/templates/actor/actor-linkage-sheet.hbs",
-      width: 600,
+      width: 700,
       height: 600,
+      resizable: false,
       tabs: [
         {
           navSelector: ".sheet-tabs",
@@ -58,15 +59,15 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
 
+    // Prepare active effects
+    context.effects = prepareActiveEffectCategories(this.actor.effects);
+
     // Enrich textarea content
     context.enrichments = {
       biography: await TextEditor.enrichHTML(context.system.biography, {
         async: true,
       }),
     };
-
-    // Prepare active effects
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
 
     console.log("Actor Data:", actorData);
     console.log("Context Data:", context);
@@ -94,8 +95,6 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Initialize containers.
     const skills = [];
 
-    const itemsEquippedWeapon = [];
-    const itemsEquippedArmor = [];
     const itemsWeapon = [];
     const itemsArmor = [];
     const itemsGear = [];
@@ -107,17 +106,9 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
       if (i.type === "skill") {
         skills.push(i);
       } else if (i.type === "human-weapon") {
-        if (i.system.equipped === true) {
-          itemsEquippedWeapon.push(i);
-        } else {
-          itemsWeapon.push(i);
-        }
+        itemsWeapon.push(i);
       } else if (i.type === "human-armor") {
-        if (i.system.equipped === true) {
-          itemsEquippedArmor.push(i);
-        } else {
-          itemsArmor.push(i);
-        }
+        itemsArmor.push(i);
       } else if (i.type === "gear") {
         itemsGear.push(i);
       }
@@ -126,10 +117,6 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Assign and return
     context.skills = skills;
     context.items = {
-      equipped: {
-        weapons: itemsEquippedWeapon,
-        armor: itemsEquippedArmor,
-      },
       weapons: itemsWeapon,
       armor: itemsArmor,
       gear: itemsGear,
@@ -153,6 +140,14 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    // Update Inventory Item
+    html.on("change", ".toggle-equipped", (ev) => {
+      const input = ev.currentTarget;
+      const itemId = input.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      item.update({ "system.equipped": input.checked });
+    });
+
     // Add Inventory Item
     html.on("click", ".item-create", this._onItemCreate.bind(this));
 
@@ -174,8 +169,26 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
       onManageActiveEffect(ev, document);
     });
 
+    // 대미지 굴림 버튼 클릭 이벤트
+    html.on("click", ".roll-damage", (ev) => {
+      const itemId = $(ev.currentTarget).data("item-id");
+      const item = this.actor.items.get(itemId);
+
+      // 무기의 대미지 굴림 수행
+      if (item) {
+        const damageRoll = new Roll(item.system.damage);
+        damageRoll.roll().toMessage({
+          speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+          flavor: `${item.name} 대미지 롤`,
+        });
+      }
+    });
+
     // Rollable abilities.
     html.on("click", ".rollable", this._onRoll.bind(this));
+
+    // New Initiative event listener
+    html.on("click", ".rollInitiative", this._onInitiativeRoll.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -214,36 +227,93 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
   }
-
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const dataset = element.dataset;
+    const rollType = element.dataset.action;
 
-    // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == "item") {
-        const itemId = element.closest(".item").dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
+    // Define base stats for roll based on rollType
+    let baseStat = 0;
+    if (rollType.includes("Roll")) {
+      const ability = rollType.replace("Roll", ""); // 'strRoll' -> 'str'
+      baseStat = this.actor.system.attributes[ability].mod;
+    } else {
+      baseStat = this.actor.system["battle-stats"][rollType].total;
     }
 
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : "";
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get("core", "rollMode"),
-      });
-      return roll;
+    // Prepare data for the dialog
+    const dialogTemplate =
+      "systems/metallic-guardian/templates/dialogs/rollDialog.hbs";
+    const dialogData = { rollType };
+
+    // Render dialog for modifier input
+    const html = await renderTemplate(dialogTemplate, dialogData);
+    let modifier = 0;
+
+    // Create dialog
+    new Dialog({
+      title: `${rollType} 판정`,
+      content: html,
+      buttons: {
+        roll: {
+          icon: '<i class="fas fa-dice-d20"></i>',
+          label: "Roll",
+          callback: async (html) => {
+            modifier = parseInt(html.find('input[name="modifier"]').val()) || 0;
+
+            // Roll the dice (2d6 + base stat + modifier)
+            const roll = new Roll(`2d6 + @base + @modifier`, {
+              base: baseStat,
+              modifier: modifier,
+            });
+
+            roll.toMessage({
+              speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+              flavor: `${rollType} 판정 결과`,
+            });
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Cancel",
+        },
+      },
+      default: "roll",
+    }).render(true);
+  }
+
+  /**
+   * Handle Initiative Roll and register in Combat Tracker.
+   * @private
+   */
+  async _onInitiativeRoll() {
+    // Get the actor's initiative value
+    const initiative = this.actor.system["battle-stats"].initiative.added;
+
+    // Ensure the actor is part of the combat
+    if (!game.combat) {
+      ui.notifications.error("No active combat encounter found.");
+      return;
     }
+
+    const combatant = game.combat.getCombatantByActor(this.actor.id);
+
+    if (!combatant) {
+      ui.notifications.error(
+        "This actor is not part of the current encounter."
+      );
+      return;
+    }
+
+    // Register the initiative value in the encounter
+    await game.combat.setInitiative(combatant.id, initiative);
+    ui.notifications.info(
+      `${this.actor.name}'s initiative set to ${initiative}`
+    );
   }
 }

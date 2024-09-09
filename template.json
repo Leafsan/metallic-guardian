@@ -9,28 +9,22 @@
       "attributes": {
         "attributes": {
           "str": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           },
           "dex": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           },
           "per": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           },
           "int": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           },
           "wil": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           },
           "luk": {
-            "value": 0,
-            "mod": 0
+            "value": 0
           }
         }
       },

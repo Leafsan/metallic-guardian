@@ -20,48 +20,57 @@
       <div class="combat-stat grid-span-3">전투치 베이스</div>
       <input
         type="number"
-        name="system.combat.base.accuracy"
-        value="{{system.combat.base.accuracy}}"
+        name="system.battle-stats.accuracy.base"
+        value="{{system.battle-stats.accuracy.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.evasion"
-        value="{{system.combat.base.evasion}}"
+        name="system.battle-stats.evasion.base"
+        value="{{system.battle-stats.evasion.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.artillery"
-        value="{{system.combat.base.artillery}}"
+        name="system.battle-stats.artillery.base"
+        value="{{system.battle-stats.artillery.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.defense"
-        value="{{system.combat.base.defense}}"
+        name="system.battle-stats.defense.base"
+        value="{{system.battle-stats.defense.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.initiative"
-        value="{{system.combat.base.initiative}}"
+        name="ssystem.battle-stats.initiative.base"
+        value="{{system.battle-stats.initiative.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.field"
-        value="{{system.combat.base.field}}"
+        name="system.battle-stats.field.base"
+        value="{{system.battle-stats.field.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.durability"
-        value="{{system.combat.base.durability}}"
+        name="system.battle-stats.durability.base"
+        value="{{system.battle-stats.durability.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.response"
-        value="{{system.combat.base.response}}"
+        name="system.battle-stats.response.base"
+        value="{{system.battle-stats.response.base}}"
+        readonly
       />
       <input
         type="number"
-        name="system.combat.base.damage"
-        value="{{system.combat.base.damage}}"
+        name="system.battle-stats.damabe.base"
+        value="{{system.battle-stats.damage.base}}"
+        readonly
       />
     </div>
 
@@ -72,69 +81,267 @@
       <!-- 클래스 1 -->
       <div class="grid-start-2">{{system.class.first.name}}</div>
       <div>{{system.class.first.level}}</div>
-      <input type="number" name="system.class.first.accuracy" />
-      <input type="number" name="system.class.first.evasion" />
-      <input type="number" name="system.class.first.artillery" />
-      <input type="number" name="system.class.first.defense" />
-      <input type="number" name="system.class.first.initiative" />
-      <input type="number" name="system.class.first.field" />
-      <input type="number" name="system.class.first.durability" />
-      <input type="number" name="system.class.first.response" />
-      <input type="number" name="system.class.first.damage" />
+      <input
+        type="number"
+        name="system.class.first.accuracy"
+        value="{{system.class.first.accuracy}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.evasion"
+        value="{{system.class.first.evasion}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.artillery"
+        value="{{system.class.first.artillery}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.defense"
+        value="{{system.class.first.defense}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.initiative"
+        value="{{system.class.first.initiative}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.field"
+        value="{{system.class.first.field}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.durability"
+        value="{{system.class.first.durability}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.response"
+        value="{{system.class.first.response}}"
+      />
+      <input
+        type="number"
+        name="system.class.first.damage"
+        value="{{system.class.first.damage}}"
+      />
 
       <!-- 클래스 2 -->
       <div class="grid-start-2">{{system.class.second.name}}</div>
       <div>{{system.class.second.level}}</div>
-      <input type="number" name="system.class.second.accuracy" />
-      <input type="number" name="system.class.second.evasion" />
-      <input type="number" name="system.class.second.artillery" />
-      <input type="number" name="system.class.second.defense" />
-      <input type="number" name="system.class.second.initiative" />
-      <input type="number" name="system.class.second.field" />
-      <input type="number" name="system.class.second.durability" />
-      <input type="number" name="system.class.second.response" />
-      <input type="number" name="system.class.second.damage" />
+      <input
+        type="number"
+        name="system.class.second.accuracy"
+        value="{{system.class.second.accuracy}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.evasion"
+        value="{{system.class.second.evasion}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.artillery"
+        value="{{system.class.second.artillery}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.defense"
+        value="{{system.class.second.defense}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.initiative"
+        value="{{system.class.second.initiative}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.field"
+        value="{{system.class.second.field}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.durability"
+        value="{{system.class.second.durability}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.response"
+        value="{{system.class.second.response}}"
+      />
+      <input
+        type="number"
+        name="system.class.second.damage"
+        value="{{system.class.second.damage}}"
+      />
 
       <!-- 클래스 3 -->
       <div class="grid-start-2">{{system.class.third.name}}</div>
       <div>{{system.class.third.level}}</div>
-      <input type="number" name="system.class.third.accuracy" />
-      <input type="number" name="system.class.third.evasion" />
-      <input type="number" name="system.class.third.artillery" />
-      <input type="number" name="system.class.third.defense" />
-      <input type="number" name="system.class.third.initiative" />
-      <input type="number" name="system.class.third.field" />
-      <input type="number" name="system.class.third.durability" />
-      <input type="number" name="system.class.third.response" />
-      <input type="number" name="system.class.third.damage" />
+      <input
+        type="number"
+        name="system.class.third.accuracy"
+        value="{{system.class.third.accuracy}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.evasion"
+        value="{{system.class.third.evasion}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.artillery"
+        value="{{system.class.third.artillery}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.defense"
+        value="{{system.class.third.defense}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.initiative"
+        value="{{system.class.third.initiative}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.field"
+        value="{{system.class.third.field}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.durability"
+        value="{{system.class.third.durability}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.response"
+        value="{{system.class.third.response}}"
+      />
+      <input
+        type="number"
+        name="system.class.third.damage"
+        value="{{system.class.third.damage}}"
+      />
     </div>
 
     <!-- 미장비 (소계) -->
     <div class="equipment-section grid grid-12col">
       <div class="combat-stat grid-span-3">미장비 (소계)</div>
-      <input type="number" name="system.equipment.sk.accuracy" />
-      <input type="number" name="system.equipment.sk.evasion" />
-      <input type="number" name="system.equipment.sk.artillery" />
-      <input type="number" name="system.equipment.sk.defense" />
-      <input type="number" name="system.equipment.sk.initiative" />
-      <input type="number" name="system.equipment.sk.field" />
-      <input type="number" name="system.equipment.sk.durability" />
-      <input type="number" name="system.equipment.sk.response" />
-      <input type="number" name="system.equipment.sk.damage" />
+      <input
+        type="number"
+        name="system.battle-stats.accuracy.total"
+        value="{{system.battle-stats.accuracy.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.evasion.total"
+        value="{{system.battle-stats.evasion.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.artillery.total"
+        value="{{system.battle-stats.artillery.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.defense.total"
+        value="{{system.battle-stats.defense.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.initiative.total"
+        value="{{system.battle-stats.initiative.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.field.total"
+        value="{{system.battle-stats.field.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.durability.total"
+        value="{{system.battle-stats.durability.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.response.total"
+        value="{{system.battle-stats.response.total}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.damage.total"
+        value="{{system.battle-stats.damage.total}}"
+        readonly
+      />
     </div>
 
     <!-- 장비 상태 (소계) -->
     <div class="equipment-status-section grid grid-12col">
       <div class="combat-stat grid-span-3">장비 상태 (소계)</div>
-      <input type="number" name="system.equipment.status.accuracy" />
-      <input type="number" name="system.equipment.status.evasion" />
-      <input type="number" name="system.equipment.status.artillery" />
-      <input type="number" name="system.equipment.status.defense" />
-      <input type="number" name="system.equipment.status.initiative" />
-      <input type="number" name="system.equipment.status.field" />
-      <input type="number" name="system.equipment.status.durability" />
-      <input type="number" name="system.equipment.status.response" />
-      <input type="number" name="system.equipment.status.damage" />
+      <input
+        type="number"
+        name="system.battle-stats.accuracy.added"
+        value="{{system.battle-stats.accuracy.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.evasion.added"
+        value="{{system.battle-stats.evasion.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.artillery.added"
+        value="{{system.battle-stats.artillery.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.defense.added"
+        value="{{system.battle-stats.defense.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.initiative.added"
+        value="{{system.battle-stats.initiative.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.field.added"
+        value="{{system.battle-stats.field.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.durability.added"
+        value="{{system.battle-stats.durability.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.response.added"
+        value="{{system.battle-stats.response.added}}"
+        readonly
+      />
+      <input
+        type="number"
+        name="system.battle-stats.damage.added"
+        value="{{system.battle-stats.damage.added}}"
+        readonly
+      />
     </div>
   </div>
 </section>

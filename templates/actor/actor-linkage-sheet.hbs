@@ -1,16 +1,10 @@
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
   {{! Sheet Header }}
-  <header
-    class="sheet-header grid grid-3col"
-    style="grid-template-columns: 150px 1fr 1fr; gap: 20px; align-items: start;"
-  >
+  <header class="sheet-header grid grid-3col">
 
     {{! 이미지 영역 }}
-    <div
-      class="profile-img-container"
-      style="display: flex; justify-content: center; align-items: center;"
-    >
+    <div class="profile-img-container">
       <img
         class="profile-img"
         src="{{actor.img}}"
@@ -22,184 +16,171 @@
     </div>
 
     {{! 이름, HP, 경험치, 상비화 포인트 영역 }}
-    <div class="header-fields flexcol" style="gap: 10px;">
-      <div class="name-level flexcol" style="gap: 5px;">
+    <div class="header-fields flexcol">
+      <div class="name-level flexcol grid-2col">
         <label for="name" class="resource-label">이름</label>
         <input
           name="name"
           type="text"
           value="{{actor.name}}"
           placeholder="Name"
-          style="width: 100%;"
         />
       </div>
 
       {{! HP 영역 }}
-      <div class="hp-container flexcol" style="gap: 10px;">
-        <div class="resource flex-group-center">
-          <label for="system.HP.value" class="resource-label">HP</label>
-          <div
-            class="resource-content flexrow flex-center flex-between"
-            style="gap: 5px;"
-          >
-            <input
-              type="text"
-              name="system.HP.value"
-              value="{{system.HP.value}}"
-              data-dtype="Number"
-              style="width: 50px;"
-            />
-            <span> / </span>
-            <input
-              type="text"
-              name="system.HP.max"
-              value="{{system.HP.max}}"
-              data-dtype="Number"
-              style="width: 50px;"
-            />
-          </div>
-        </div>
-      </div>
-
-      {{! 경험치 영역 }}
-      <div class="xp-container flexcol" style="gap: 10px;">
-        <div class="resource flex-group-center">
-          <label for="system.exp" class="resource-label">경험치</label>
+      <div class="hp-container flexcol grid-2col">
+        <label for="system.HP.value" class="resource-label">HP</label>
+        <div class="resource-content flexrow flex-center flex-between">
           <input
             type="text"
-            name="system.exp"
-            value="{{system.exp}}"
+            name="system.HP.value"
+            value="{{system.HP.value}}"
             data-dtype="Number"
-            style="width: 100px;"
+          />
+          <span> / </span>
+          <input
+            type="text"
+            name="system.HP.max"
+            value="{{system.HP.max}}"
+            data-dtype="Number"
+            readonly
           />
         </div>
       </div>
 
+      {{! 경험치 영역 }}
+      <div class="xp-container flexcol grid-2col">
+        <label for="system.exp" class="resource-label">경험치</label>
+        <input
+          type="text"
+          name="system.exp"
+          value="{{system.exp}}"
+          data-dtype="Number"
+        />
+      </div>
+
       {{! 상비화 포인트 (equip-point) 영역 }}
-      <div class="equip-point-container flexcol" style="gap: 10px;">
-        <div class="resource flex-group-center">
-          <label for="system.equip-point" class="resource-label">상비화 포인트</label>
-          <div
-            class="resource-content flexrow flex-center flex-between"
-            style="gap: 10px;"
-          >
-            <input
-              type="text"
-              name="system.equip-point.used"
-              value="{{system.equip-point.used}}"
-              data-dtype="Number"
-              style="width: 50px;"
-              readonly
-            />
-            <span> / </span>
-            <input
-              type="text"
-              name="system.equip-point.remaining"
-              value="{{system.equip-point.remaining}}"
-              data-dtype="Number"
-              style="width: 100px;"
-            />
-          </div>
+      <div class="equip-point-container flexcol grid-2col">
+        <label for="system.equip-point" class="resource-label">상비화 포인트</label>
+        <div class="resource-content flexrow flex-center flex-between">
+          <input
+            type="text"
+            name="system.equip-point.used"
+            value="{{system.equip-point.used}}"
+            data-dtype="Number"
+          />
+          <span> / </span>
+          <input
+            type="text"
+            name="system.equip-point.remaining"
+            value="{{system.equip-point.remaining}}"
+            data-dtype="Number"
+          />
         </div>
       </div>
     </div>
 
     {{! 클래스 및 레벨 영역 (우측 배치) }}
-    <div class="class-level-fields flexcol" style="gap: 10px;">
-      {{! 레벨과 레벨 수치 입력란을 나란히 배치 }}
-      <div
-        class="level-container flexrow"
-        style="gap: 10px; align-items: center;"
-      >
-        <label
-          for="system.attributes.level.value"
-          class="resource-label"
-          style="margin-bottom: 0;"
-        >레벨</label>
+    <div class="class-level-fields flexcol">
+      <div class="level-container flexrow">
+        <label for="system.attributes.level.value" class="resource-label">레벨</label>
         <input
           type="text"
           name="system.attributes.level.value"
           value="{{system.level}}"
           data-dtype="Number"
-          style="width: 100px;"
         />
       </div>
 
       {{! 클래스와 클래스 레벨을 나란히 배치 }}
-      <div class="class-list flexcol" style="gap: 10px;">
-        <div class="flexcol" style="align-items: flex-start;">
-          <div class="flexrow" style="gap: 10px;">
+      <div class="class-list flexcol">
+        <div class="flexcol">
+          <div class="flexrow">
             <input
               type="text"
               name="system.class.first.name"
               value="{{system.class.first.name}}"
               placeholder="Class 1"
-              style="flex-grow: 1;"
             />
             <input
               type="text"
               name="system.class.first.level"
               value="{{system.class.first.level}}"
               placeholder="LV"
-              style="width: 50px;"
             />
           </div>
         </div>
 
-        <div class="flexcol" style="align-items: flex-start;">
-          <div class="flexrow" style="gap: 10px;">
+        <div class="flexcol">
+          <div class="flexrow">
             <input
               type="text"
               name="system.class.second.name"
               value="{{system.class.second.name}}"
               placeholder="Class 2"
-              style="flex-grow: 1;"
             />
             <input
               type="text"
               name="system.class.second.level"
               value="{{system.class.second.level}}"
               placeholder="LV"
-              style="width: 50px;"
             />
           </div>
         </div>
 
-        <div class="flexcol" style="align-items: flex-start;">
-          <div class="flexrow" style="gap: 10px;">
+        <div class="flexcol">
+          <div class="flexrow">
             <input
               type="text"
               name="system.class.third.name"
               value="{{system.class.third.name}}"
               placeholder="Class 3"
-              style="flex-grow: 1;"
             />
             <input
               type="text"
               name="system.class.third.level"
               value="{{system.class.third.level}}"
               placeholder="LV"
-              style="width: 50px;"
             />
           </div>
+        </div>
+      </div>
+
+      <div class="speed-container grid-2col">
+        <div>
+          <label>이동력</label>
+          <input
+            type="text"
+            name="system.battle-stats.speed.value"
+            value="{{system.battle-stats.speed.value}}"
+            data-dtype="Number"
+            readonly
+          />
+        </div>
+        <div>
+          <label>전력이동</label>
+          <input
+            type="text"
+            name="system.battle-stats.speed.full"
+            value="{{system.battle-stats.speed.full}}"
+            data-dtype="Number"
+            readonly
+          />
         </div>
       </div>
     </div>
   </header>
 
   {{! 능력치 테이블 영역 }}
-  <section
-    class="attributes-container grid grid-6col"
-    style="grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;"
-  >
+  <section class="attributes-container grid grid-6col">
 
     {{! 능력치 헤더 }}
-    <div class="attribute-header">체력</div>
-    <div class="attribute-header">반사</div>
-    <div class="attribute-header">지각</div>
-    <div class="attribute-header">이성</div>
-    <div class="attribute-header">의지</div>
-    <div class="attribute-header">행운</div>
+    <button class="attribute-header rollable" data-action="strRoll">체력</button>
+    <button class="attribute-header rollable" data-action="dexRoll">반사</button>
+    <button class="attribute-header rollable" data-action="perRoll">지각</button>
+    <button class="attribute-header rollable" data-action="intRoll">이성</button>
+    <button class="attribute-header rollable" data-action="wilRoll">의지</button>
+    <button class="attribute-header rollable" data-action="lukRoll">행운</button>
 
     {{! 능력치 값 표시 영역 }}
     <div class="attribute">
@@ -208,7 +189,6 @@
         name="system.attributes.str.value"
         value="{{system.attributes.str.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute">
@@ -217,7 +197,6 @@
         name="system.attributes.dex.value"
         value="{{system.attributes.dex.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute">
@@ -226,7 +205,6 @@
         name="system.attributes.per.value"
         value="{{system.attributes.per.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute">
@@ -235,7 +213,6 @@
         name="system.attributes.int.value"
         value="{{system.attributes.int.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute">
@@ -244,7 +221,6 @@
         name="system.attributes.wil.value"
         value="{{system.attributes.wil.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute">
@@ -253,7 +229,6 @@
         name="system.attributes.luk.value"
         value="{{system.attributes.luk.value}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
 
@@ -262,143 +237,112 @@
       <input
         type="number"
         name="system.attributes.str.modifier.total"
-        value="{{system.attributes.str.modifier.total}}"
+        value="{{system.attributes.str.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
         name="system.attributes.dex.modifier.total"
-        value="{{system.attributes.dex.modifier.total}}"
+        value="{{system.attributes.dex.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
         name="system.attributes.per.modifier.total"
-        value="{{system.attributes.per.modifier.total}}"
+        value="{{system.attributes.per.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
         name="system.attributes.int.modifier.total"
-        value="{{system.attributes.int.modifier.total}}"
+        value="{{system.attributes.int.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
         name="system.attributes.wil.modifier.total"
-        value="{{system.attributes.wil.modifier.total}}"
+        value="{{system.attributes.wil.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
         name="system.attributes.luk.modifier.total"
-        value="{{system.attributes.luk.modifier.total}}"
+        value="{{system.attributes.luk.mod}}"
         data-dtype="Number"
-        style="width: 50px;"
       />
     </div>
 
   </section>
 
   {{! 판정 버튼 영역 }}
-  <section class="roll-buttons flexrow" style="gap: 10px; padding-top: 20px;">
+  <section class="roll-buttons flexrow">
 
     {{! 명중판정 버튼 }}
     <div class="roll-button">
-      <button
-        type="button"
-        class="rollable"
-        data-action="accuracyRoll"
-      >명중판정</button>
+      <button type="button" class="rollable" data-action="accuracy">명중판정</button>
       <input
         type="number"
-        name="system.battle-stats.accuracy.total"
-        value="{{system.battle-stats.accuracy.total}}"
+        name="system.battle-stats.accuracy.added"
+        value="{{system.battle-stats.accuracy.added}}"
         data-dtype="Number"
-        style="width: 50px;"
         readonly
       />
     </div>
 
     {{! 회피판정 버튼 }}
     <div class="roll-button">
-      <button
-        type="button"
-        class="rollable"
-        data-action="evasionRoll"
-      >회피판정</button>
+      <button type="button" class="rollable" data-action="evasion">회피판정</button>
       <input
         type="number"
-        name="system.battle-stats.evasion.total"
-        value="{{system.battle-stats.evasion.total}}"
+        name="system.battle-stats.evasion.added"
+        value="{{system.battle-stats.evasion.added}}"
         data-dtype="Number"
-        style="width: 50px;"
         readonly
       />
     </div>
 
     {{! 포격판정 버튼 }}
     <div class="roll-button">
-      <button
-        type="button"
-        class="rollable"
-        data-action="artilleryRoll"
-      >포격판정</button>
+      <button type="button" class="rollable" data-action="artillery">포격판정</button>
       <input
         type="number"
-        name="system.battle-stats.artillery.total"
-        value="{{system.battle-stats.artillery.total}}"
+        name="system.battle-stats.artillery.added"
+        value="{{system.battle-stats.artillery.added}}"
         data-dtype="Number"
-        style="width: 50px;"
         readonly
       />
     </div>
 
     {{! 방벽판정 버튼 }}
     <div class="roll-button">
-      <button
-        type="button"
-        class="rollable"
-        data-action="defenseRoll"
-      >방벽판정</button>
+      <button type="button" class="rollable" data-action="defense">방벽판정</button>
       <input
         type="number"
-        name="system.battle-stats.defense.total"
-        value="{{system.battle-stats.defense.total}}"
+        name="system.battle-stats.defense.added"
+        value="{{system.battle-stats.defense.added}}"
         data-dtype="Number"
-        style="width: 50px;"
         readonly
       />
     </div>
 
     {{! 행동력(이니셔티브) 버튼 }}
     <div class="roll-button">
-      <button
-        type="button"
-        class="rollable"
-        data-action="initiativeRoll"
-      >행동력</button>
+      <button type="button" class="rollInitiative" data-action="initiative">행동력</button>
       <input
         type="number"
-        name="system.battle-stats.initiative.total"
-        value="{{system.battle-stats.initiative.total}}"
+        name="system.battle-stats.initiative.added"
+        value="{{system.battle-stats.initiative.added}}"
         data-dtype="Number"
-        style="width: 50px;"
         readonly
       />
     </div>

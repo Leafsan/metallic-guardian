@@ -3,7 +3,8 @@
   <!-- 무기 리스트 -->
   <li class="item flexrow items-header">
     <div class="item-name">{{localize "Weapon"}}</div>
-    <div class="item-formula">{{localize "Roll Formula"}}</div>
+    <div class="item-damage">{{localize "Damage"}}</div> <!-- 대미지 열 추가 -->
+    <div class="item-equipped">{{localize "Equipped"}}</div>
     <div class="item-controls">
       <a
         class="item-control item-create"
@@ -30,7 +31,20 @@
         </div>
         <h4>{{item.name}}</h4>
       </div>
-      <div class="item-formula item-prop">{{item.system.formula}}</div>
+      <div class="item-damage">
+        <a class="roll-damage" data-item-id="{{item._id}}" title="Roll Damage">
+          <i class="fas fa-dice-d20"></i>
+        </a>
+      </div>
+      <div class="item-equipped">
+        <input
+          type="checkbox"
+          name="system.equipped"
+          {{#if item.system.equipped}}checked{{/if}}
+          data-item-id="{{item._id}}"
+          class="toggle-equipped"
+        />
+      </div>
       <div class="item-controls">
         <a
           class="item-control item-edit"
@@ -47,11 +61,12 @@
       </div>
     </li>
   {{/each}}
-
+</ol>
+<ol class="items-list">
   <!-- 방어구 리스트 -->
   <li class="item flexrow items-header">
     <div class="item-name">{{localize "Armor"}}</div>
-    <div class="item-formula">{{localize "Roll Formula"}}</div>
+    <div class="item-equipped">{{localize "Equipped"}}</div>
     <div class="item-controls">
       <a
         class="item-control item-create"
@@ -78,7 +93,15 @@
         </div>
         <h4>{{item.name}}</h4>
       </div>
-      <div class="item-formula item-prop">{{item.system.formula}}</div>
+      <div class="item-equipped">
+        <input
+          type="checkbox"
+          name="system.equipped"
+          {{#if item.system.equipped}}checked{{/if}}
+          data-item-id="{{item._id}}"
+          class="toggle-equipped"
+        />
+      </div>
       <div class="item-controls">
         <a
           class="item-control item-edit"
@@ -95,11 +118,11 @@
       </div>
     </li>
   {{/each}}
-
+</ol>
+<ol class="items-list">
   <!-- 장비 리스트 -->
   <li class="item flexrow items-header">
     <div class="item-name">{{localize "Gear"}}</div>
-    <div class="item-formula">{{localize "Roll Formula"}}</div>
     <div class="item-controls">
       <a
         class="item-control item-create"
