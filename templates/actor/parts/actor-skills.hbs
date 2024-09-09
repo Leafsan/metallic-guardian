@@ -3,7 +3,7 @@
   <li class="item grid grid-7col items-header">
     <div class="item-name grid-span-3">특기</div>
     <div class="item-name">타이밍</div>
-    <div class="item-name grid-span-2">사용</div>
+    <div class="item-name grid-span-2">코스트</div>
     <div class="item-controls">
       <a
         class="item-control item-create"
@@ -20,7 +20,7 @@
       <!-- 스킬 이름과 이미지 -->
       <div class="item-name grid-span-3">
         <div class="item-image">
-          <a class="rollable" data-roll-type="item">
+          <a class="view-item" data-item-id="{{item._id}}">
             <img
               src="{{item.img}}"
               title="{{item.name}}"
@@ -40,8 +40,8 @@
       </div>
 
       <!-- 스킬 체크 타입 (사용 방식) -->
-      <div class="item-checkType grid-span-2">
-        <h4>{{item.system.checkType}}</h4>
+      <div class="item-cost grid-span-2">
+        <h4>{{item.system.cost}}</h4>
       </div>
 
       <!-- 스킬 편집 및 삭제 버튼 -->

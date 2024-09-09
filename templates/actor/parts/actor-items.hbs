@@ -20,7 +20,7 @@
     <li class="item flexrow" data-item-id="{{item._id}}">
       <div class="item-name">
         <div class="item-image">
-          <a class="rollable" data-roll-type="item">
+          <a class="view-item" data-item-id="{{item._id}}">
             <img
               src="{{item.img}}"
               title="{{item.name}}"
@@ -31,12 +31,12 @@
         </div>
         <h4>{{item.name}}</h4>
       </div>
-      <div class="item-damage">
+      <div class="item-damage align-center">
         <a class="roll-damage" data-item-id="{{item._id}}" title="Roll Damage">
           <i class="fas fa-dice-d20"></i>
         </a>
       </div>
-      <div class="item-equipped">
+      <div class="item-equipped align-center">
         <input
           type="checkbox"
           name="system.equipped"
@@ -82,7 +82,7 @@
     <li class="item flexrow" data-item-id="{{item._id}}">
       <div class="item-name">
         <div class="item-image">
-          <a class="rollable" data-roll-type="item">
+          <a class="view-item" data-item-id="{{item._id}}">
             <img
               src="{{item.img}}"
               title="{{item.name}}"
@@ -93,7 +93,7 @@
         </div>
         <h4>{{item.name}}</h4>
       </div>
-      <div class="item-equipped">
+      <div class="item-equipped align-center">
         <input
           type="checkbox"
           name="system.equipped"
@@ -138,7 +138,7 @@
     <li class="item flexrow" data-item-id="{{item._id}}">
       <div class="item-name">
         <div class="item-image">
-          <a class="rollable" data-roll-type="item">
+          <a class="view-item" data-item-id="{{item._id}}">
             <img
               src="{{item.img}}"
               title="{{item.name}}"
