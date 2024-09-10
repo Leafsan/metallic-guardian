@@ -52,7 +52,6 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     context.items = this.actor.items.toObject(); // Fetch all actor's items
 
     // Prepare character data and items.
-    console.log("Preparing character data...");
     this._prepareItems(context);
     this._prepareCharacterData(context);
 
@@ -68,9 +67,6 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
         async: true,
       }),
     };
-
-    console.log("Actor Data:", actorData);
-    console.log("Context Data:", context);
 
     return context;
   }

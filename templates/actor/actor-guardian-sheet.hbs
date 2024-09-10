@@ -94,49 +94,55 @@
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.str.modifier.total"
+        name="system.attributes.str.mod"
         value="{{system.attributes.str.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.dex.modifier.total"
+        name="system.attributes.dex.mod"
         value="{{system.attributes.dex.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.per.modifier.total"
+        name="system.attributes.per.mod"
         value="{{system.attributes.per.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.int.modifier.total"
+        name="system.attributes.int.mod"
         value="{{system.attributes.int.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.wil.modifier.total"
+        name="system.attributes.wil.mod"
         value="{{system.attributes.wil.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
     <div class="attribute-mod">
       <input
         type="number"
-        name="system.attributes.luk.modifier.total"
+        name="system.attributes.luk.mod"
         value="{{system.attributes.luk.mod}}"
         data-dtype="Number"
+        readonly
       />
     </div>
   </section>
@@ -205,6 +211,83 @@
 
   </section>
 
+    <section class="sheet-stats grid grid-8col">
+      <div class="stat-header grid-span-8">방어수정</div>
+
+      <div class="stat-label">참격</div>
+      <div class="stat-label">관통</div>
+      <div class="stat-label">타격</div>
+      <div class="stat-label">화염</div>
+      <div class="stat-label">얼음</div>
+      <div class="stat-label">번개</div>
+      <div class="stat-label">광휘</div>
+      <div class="stat-label">어둠</div>
+
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.slash"
+          value="{{system.defense.slash}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.pierce"
+          value="{{system.defense.pierce}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.blunt"
+          value="{{system.defense.blunt}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.fire"
+          value="{{system.defense.fire}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.ice"
+          value="{{system.defense.ice}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.electric"
+          value="{{system.defense.electric}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.light"
+          value="{{system.defense.light}}"
+          readonly
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.dark"
+          value="{{system.defense.dark}}"
+          readonly
+        />
+      </div>
+    </section>
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}

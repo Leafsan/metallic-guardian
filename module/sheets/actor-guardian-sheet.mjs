@@ -52,7 +52,6 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     context.items = this.actor.items.toObject(); // Fetch all actor's items
 
     // Prepare character data and items.
-    console.log("Preparing character data...");
     this._prepareItems(context);
     this._prepareCharacterData(context);
 
@@ -68,9 +67,6 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
         async: true,
       }),
     };
-
-    console.log("Actor Data:", actorData);
-    console.log("Context Data:", context);
 
     return context;
   }
@@ -92,34 +88,27 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
    * @return {undefined}
    */
   _prepareItems(context) {
-    // Initialize containers.
-    const skills = [];
-
+    const itemsModel = [];
     const itemsWeapon = [];
-    const itemsArmor = [];
-    const itemsGear = [];
+    const itemsOption = [];
 
-    // Iterate through items, allocating to containers
     for (let i of context.items) {
-      i.img = i.img || DEFAULT_TOKEN;
-
-      if (i.type === "skill") {
-        skills.push(i);
-      } else if (i.type === "human-weapon") {
+      if (i.type === "guardian-model") {
+        itemsModel.push(i);
+      } else if (i.type === "guardian-weapon") {
         itemsWeapon.push(i);
-      } else if (i.type === "human-armor") {
-        itemsArmor.push(i);
-      } else if (i.type === "gear") {
-        itemsGear.push(i);
+      } else if (i.type === "guardian-option") {
+        itemsOption.push(i);
       }
     }
 
-    // Assign and return
-    context.skills = skills;
+    const model = itemsModel[0];
+
+    // 선택한 모델과 나머지 아이템들 전달
     context.items = {
+      model: model,
       weapons: itemsWeapon,
-      armor: itemsArmor,
-      gear: itemsGear,
+      options: itemsOption,
     };
   }
 
@@ -132,8 +121,24 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on("click", ".item-edit", (ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.sheet.render(true);
+      let item = this.actor.items.get(li.data("itemId"));
+
+      // 파일럿이 존재하고, 아이템이 없을 경우 파일럿의 아이템인지 확인
+      if (!item && this.actor.system.pilot && this.actor.system.pilot.id) {
+        const pilot = game.actors.get(this.actor.system.pilot.id);
+        if (pilot) {
+          item = pilot.items.get(li.data("itemId")); // 파일럿의 아이템을 가져옴
+        }
+      }
+
+      // 아이템이 발견되면 해당 시트를 렌더링
+      if (item) {
+        item.sheet.render(true);
+      } else {
+        console.error("아이템을 찾을 수 없습니다.");
+      }
+
+      this.render(false);
     });
 
     // -------------------------------------------------------------
@@ -142,6 +147,9 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
 
     // 파일럿 제거 버튼 클릭 시 처리
     html.on("click", ".remove-pilot", this._onRemovePilot.bind(this));
+
+    // 모델 삭제 버튼 클릭 이벤트 리스너 추가
+    html.on("click", ".remove-model", this._onRemoveModel.bind(this));
 
     html.find(".actor-list .actor").each((i, actorElement) => {
       actorElement.setAttribute("draggable", true);
@@ -158,6 +166,7 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     });
 
     html.find(".drop-zone").on("drop", this._onPilotDrop.bind(this));
+
     // Update Inventory Item
     html.on("change", ".toggle-equipped", (ev) => {
       const input = ev.currentTarget;
@@ -387,6 +396,70 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     );
   }
 
+  // async _onModelDrop(event) {
+  //   event.preventDefault();
+
+  //   // 드래그앤드롭된 데이터에서 액터 UUID 정보 추출
+  //   const data = JSON.parse(
+  //     event.originalEvent.dataTransfer.getData("text/plain")
+  //   );
+
+  //   console.log("Data : ", data);
+
+  //   // 드래그된 데이터가 액터인지 확인
+  //   if (data.type !== "Item") {
+  //     return ui.notifications.warn("유효하지 않은 아이템입니다.");
+  //   }
+
+  //   // UUID를 이용해 액터를 가져옴
+  //   const item = await fromUuid(data.uuid);
+
+  //   // 드래그된 액터가 linkage 타입인지 확인
+  //   if (!item || item.type !== "guardian-model") {
+  //     return ui.notifications.warn(
+  //       "모델로 등록할 수 있는 guardian-model 타입의 아이템만 가능합니다."
+  //     );
+  //   }
+
+  //   console.log("Item : ", item);
+
+  //   // 모델로 등록
+  //   await this.actor.update({
+  //     "system.model": { name: item.name, id: item.id },
+  //   });
+
+  //   console.log(
+  //     "Items : ",
+  //     this.actor.items.toObject().filter((i) => i.type === "guardian-model")
+  //   );
+
+  //   ui.notifications.info(`${item.name}을(를) 모델로 등록했습니다.`);
+  // }
+
+  /**
+   * Handle model removal when the remove button is clicked
+   * @param {Event} event The originating click event
+   * @private
+   */
+  async _onRemoveModel(event) {
+    event.preventDefault();
+
+    console.log(
+      "actor : ",
+      this.actor.items.filter((i) => i.type === "guardian-model")
+    );
+    // 모델 필드를 비움
+    this.actor.items
+      .filter((i) => i.type === "guardian-model")
+      .forEach((i) => i.delete());
+
+    // 알림 메시지 출력
+    ui.notifications.info("모델이 제거되었습니다.");
+
+    // 시트 다시 렌더링
+    this.render(false);
+  }
+
   async _onPilotDrop(event) {
     event.preventDefault();
 
@@ -435,13 +508,22 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
    * 아이템의 내용을 채팅 창에 요약해서 표시하는 함수
    * @param {Event} event   클릭 이벤트
    */
-  _onViewItem(event) {
+  async _onViewItem(event) {
     // 클릭된 아이템의 ID를 가져옴
     const itemId = $(event.currentTarget).data("item-id");
 
-    // 액터의 아이템 목록에서 해당 아이템을 찾음
-    const item = this.actor.items.get(itemId);
+    // 파일럿 액터가 존재하면 파일럿의 스킬을 가져오기 위해 액터를 참조
+    const pilot = this.actor.system.pilot
+      ? game.actors.get(this.actor.system.pilot.id)
+      : null;
 
+    // 파일럿의 스킬 중에서 해당 ID를 가진 아이템을 찾음
+    let item = this.actor.items.get(itemId);
+    if (!item && pilot) {
+      item = pilot.items.get(itemId);
+    }
+
+    // 아이템이 없으면 반환
     if (!item) return;
 
     // 아이템 종류에 따라 메시지 분기 처리

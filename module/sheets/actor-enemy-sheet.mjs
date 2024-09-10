@@ -36,15 +36,9 @@ export class MetallicGuardianEnemySheet extends ActorSheet {
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor;
 
-    console.log("Actor Sheet Data:", actorData);
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
-
-    // Prepare character data and items.
-    if (actorData.type == "linkage") {
-      console.log("Preparing character data...");
-    }
 
     // Prepare NPC data and items.
     if (actorData.type == "npc") {

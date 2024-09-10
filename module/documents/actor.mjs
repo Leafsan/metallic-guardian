@@ -22,6 +22,7 @@ export class MetallicGuardianActor extends Actor {
 
     // Make separate methods for each Actor type to keep things organized.
     this._prepareCharacterData(actorData);
+    this._prepareGuardianData(actorData);
     this._prepareNpcData(actorData);
   }
 
@@ -48,6 +49,120 @@ export class MetallicGuardianActor extends Actor {
       (Number(system.class.third.level) || 0);
 
     this._computeBattleStats(actorData);
+  }
+
+  _prepareGuardianData(actorData) {
+    if (actorData.type !== "guardian") return;
+
+    function sumStats(items, stats) {
+      return items.reduce((acc, item) => {
+        stats.forEach((stat) => {
+          // 해당 속성이 존재하면 합산
+          acc[stat] =
+            (acc[stat] || 0) + (item.system["battle-stats"][stat] || 0);
+        });
+        return acc;
+      }, {});
+    }
+
+    function sumDefense(items, defenses) {
+      return items.reduce((acc, item) => {
+        defenses.forEach((defense) => {
+          // 해당 방어력이 존재하면 합산
+          acc[defense] =
+            (acc[defense] || 0) + (item.system["defense"][defense] || 0);
+        });
+        return acc;
+      }, {});
+    }
+
+    // 합산할 속성 리스트 정의
+    const battleStats = [
+      "accuracy",
+      "evasion",
+      "artillery",
+      "defense",
+      "initiative",
+    ]; // 예시 속성들
+
+    const defenseStats = [
+      "slash",
+      "pierce",
+      "blunt",
+      "fire",
+      "ice",
+      "electric",
+      "light",
+      "dark",
+    ]; // 예시 방어력들
+
+    const system = actorData.system;
+    const model = actorData.itemTypes["guardian-model"][0] || null;
+    const pilot = system.pilot?.id
+      ? game.actors.get(system.pilot.id)?.system
+      : null;
+
+    const weapons = actorData.itemTypes["guardian-weapon"].filter(
+      (equip) => equip.system.equipped
+    );
+    const options = actorData.itemTypes["guardian-option"].filter(
+      (equip) => equip.system.equipped
+    );
+
+    // weapons와 options의 속성 값을 각각 합산
+    const totalWeaponStats = sumStats(weapons, battleStats);
+    const totalOptionStats = sumStats(options, battleStats);
+    const totalOptionDefenses = sumDefense(options, defenseStats);
+
+    system.attributes.str.mod = pilot?.attributes.str.mod ?? 0;
+    system.attributes.dex.mod = pilot?.attributes.dex.mod ?? 0;
+    system.attributes.per.mod = pilot?.attributes.per.mod ?? 0;
+    system.attributes.int.mod = pilot?.attributes.int.mod ?? 0;
+    system.attributes.wil.mod = pilot?.attributes.wil.mod ?? 0;
+    system.attributes.luk.mod = pilot?.attributes.luk.mod ?? 0;
+
+    system["battle-stats"].accuracy.added =
+      (pilot?.["battle-stats"].accuracy.total ?? 0) +
+      (model?.system["battle-stats"].accuracy ?? 0) +
+      (totalWeaponStats.accuracy ?? 0) +
+      (totalOptionStats.accuracy ?? 0) +
+      system["battle-stats"].accuracy.mod;
+
+    system["battle-stats"].evasion.added =
+      (pilot?.["battle-stats"].evasion.total ?? 0) +
+      (model?.system["battle-stats"].evasion ?? 0) +
+      (totalWeaponStats.evasion ?? 0) +
+      (totalOptionStats.evasion ?? 0) +
+      system["battle-stats"].evasion.mod;
+
+    system["battle-stats"].artillery.added =
+      (pilot?.["battle-stats"].artillery.total ?? 0) +
+      (model?.system["battle-stats"].artillery ?? 0) +
+      (totalWeaponStats.artillery ?? 0) +
+      (totalOptionStats.artillery ?? 0) +
+      system["battle-stats"].artillery.mod;
+
+    system["battle-stats"].defense.added =
+      (pilot?.["battle-stats"].defense.total ?? 0) +
+      (model?.system["battle-stats"].defense ?? 0) +
+      (totalWeaponStats.defense ?? 0) +
+      (totalOptionStats.defense ?? 0) +
+      system["battle-stats"].defense.mod;
+
+    system["battle-stats"].initiative.added =
+      (pilot?.["battle-stats"].initiative.total ?? 0) +
+      (model?.system["battle-stats"].initiative ?? 0) +
+      (totalWeaponStats.initiative ?? 0) +
+      (totalOptionStats.initiative ?? 0) +
+      system["battle-stats"].initiative.mod;
+
+    system.defense.slash =
+      (model?.system.defense.slash ?? 0) + (totalOptionDefenses.slash ?? 0);
+
+    console.log(Number(model?.system["defense"].slash));
+    console.log(Number(totalOptionDefenses.slash));
+
+    console.log("Options def : ", totalOptionDefenses);
   }
 
   _prepareNpcData(actorData) {
