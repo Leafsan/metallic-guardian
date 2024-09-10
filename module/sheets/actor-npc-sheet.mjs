@@ -14,7 +14,13 @@ export class MetallicGuardianNPCSheet extends ActorSheet {
       classes: ["metallic-guardian", "sheet", "actor", "npc"],
       width: 600,
       height: 600,
-      tabs: [],
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "description",
+        },
+      ],
     });
   }
 
@@ -26,40 +32,18 @@ export class MetallicGuardianNPCSheet extends ActorSheet {
   /* -------------------------------------------- */
 
   /** @override */
-  getData() {
-    // Retrieve the data structure from the base sheet. You can inspect or log
-    // the context variable to see the structure, but some key properties for
-    // sheets are the actor object, the data object, whether or not it's
-    // editable, the items array, and the effects array.
+  async getData() {
     const context = super.getData();
 
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor;
 
-    console.log("Actor Sheet Data:", actorData);
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.system = actorData.system;
-    context.flags = actorData.flags;
-
-    // Prepare character data and items.
-    if (actorData.type == "linkage") {
-      console.log("Preparing character data...");
-    }
-
-    // Prepare NPC data and items.
-    if (actorData.type == "npc") {
-      this._prepareItems(context);
-    }
-
-    // Add roll data for TinyMCE editors.
-    context.rollData = context.actor.getRollData();
-
-    // Prepare active effects
-    context.effects = prepareActiveEffectCategories(
-      // A generator that returns all effects stored on the actor
-      // as well as any items
-      this.actor.allApplicableEffects()
-    );
+    // Enrich textarea content
+    context.enrichments = {
+      biography: await TextEditor.enrichHTML(actorData.system.biography || "", {
+        async: true,
+      }),
+    };
 
     return context;
   }
@@ -71,12 +55,7 @@ export class MetallicGuardianNPCSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
-    // Handle ability scores.
-    for (let [k, v] of Object.entries(context.system.abilities)) {
-      v.label = game.i18n.localize(CONFIG.METALLIC_GUARDIAN.abilities[k]) ?? k;
-    }
-  }
+  _prepareCharacterData(context) {}
 
   /**
    * Organize and classify Items for Character sheets.
@@ -85,47 +64,7 @@ export class MetallicGuardianNPCSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareItems(context) {
-    // Initialize containers.
-    const gear = [];
-    const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
-
-    // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      // Append to gear.
-      if (i.type === "item") {
-        gear.push(i);
-      }
-      // Append to features.
-      else if (i.type === "feature") {
-        features.push(i);
-      }
-      // Append to spells.
-      else if (i.type === "spell") {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
-      }
-    }
-
-    // Assign and return
-    context.gear = gear;
-    context.features = features;
-    context.spells = spells;
-  }
+  _prepareItems(context) {}
 
   /* -------------------------------------------- */
 

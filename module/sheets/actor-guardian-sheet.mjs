@@ -11,22 +11,31 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["metallic-guardian", "sheet", "actor", "guardian"],
-      width: 600,
+      classes: ["metallic-guardian", "sheet", "actor", "linkage"],
+      template:
+        "systems/metallic-guardian/templates/actor/actor-guardian-sheet.hbs",
+      width: 700,
       height: 600,
-      tabs: [],
+      resizable: false,
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "bios",
+        },
+      ],
     });
   }
 
-  /** @override */
-  get template() {
-    return `systems/metallic-guardian/templates/actor/actor-${this.actor.type}-sheet.hbs`;
-  }
+  // /** @override */
+  // get template() {
+  //   return `systems/metallic-guardian/templates/actor/actor-${this.actor.type}-sheet.hbs`;
+  // }
 
   /* -------------------------------------------- */
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
@@ -36,30 +45,32 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor;
 
-    console.log("Actor Sheet Data:", actorData);
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
 
-    // Prepare character data and items.
-    if (actorData.type == "linkage") {
-      console.log("Preparing character data...");
-    }
+    context.items = this.actor.items.toObject(); // Fetch all actor's items
 
-    // Prepare NPC data and items.
-    if (actorData.type == "npc") {
-      this._prepareItems(context);
-    }
+    // Prepare character data and items.
+    console.log("Preparing character data...");
+    this._prepareItems(context);
+    this._prepareCharacterData(context);
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
 
     // Prepare active effects
-    context.effects = prepareActiveEffectCategories(
-      // A generator that returns all effects stored on the actor
-      // as well as any items
-      this.actor.allApplicableEffects()
-    );
+    context.effects = prepareActiveEffectCategories(this.actor.effects);
+
+    // Enrich textarea content
+    context.enrichments = {
+      biography: await TextEditor.enrichHTML(context.system.biography, {
+        async: true,
+      }),
+    };
+
+    console.log("Actor Data:", actorData);
+    console.log("Context Data:", context);
 
     return context;
   }
@@ -71,12 +82,7 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(context) {
-    // Handle ability scores.
-    for (let [k, v] of Object.entries(context.system.abilities)) {
-      v.label = game.i18n.localize(CONFIG.METALLIC_GUARDIAN.abilities[k]) ?? k;
-    }
-  }
+  _prepareCharacterData(context) {}
 
   /**
    * Organize and classify Items for Character sheets.
@@ -87,44 +93,34 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
    */
   _prepareItems(context) {
     // Initialize containers.
-    const gear = [];
-    const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+    const skills = [];
+
+    const itemsWeapon = [];
+    const itemsArmor = [];
+    const itemsGear = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
-      i.img = i.img || Item.DEFAULT_ICON;
-      // Append to gear.
-      if (i.type === "item") {
-        gear.push(i);
-      }
-      // Append to features.
-      else if (i.type === "feature") {
-        features.push(i);
-      }
-      // Append to spells.
-      else if (i.type === "spell") {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
+      i.img = i.img || DEFAULT_TOKEN;
+
+      if (i.type === "skill") {
+        skills.push(i);
+      } else if (i.type === "human-weapon") {
+        itemsWeapon.push(i);
+      } else if (i.type === "human-armor") {
+        itemsArmor.push(i);
+      } else if (i.type === "gear") {
+        itemsGear.push(i);
       }
     }
 
     // Assign and return
-    context.gear = gear;
-    context.features = features;
-    context.spells = spells;
+    context.skills = skills;
+    context.items = {
+      weapons: itemsWeapon,
+      armor: itemsArmor,
+      gear: itemsGear,
+    };
   }
 
   /* -------------------------------------------- */
@@ -144,6 +140,32 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    // 파일럿 제거 버튼 클릭 시 처리
+    html.on("click", ".remove-pilot", this._onRemovePilot.bind(this));
+
+    html.find(".actor-list .actor").each((i, actorElement) => {
+      actorElement.setAttribute("draggable", true);
+      actorElement.addEventListener("dragstart", (ev) => {
+        const actorId = actorElement.dataset.actorId;
+        const actor = game.actors.get(actorId); // 드래그한 액터 가져오기
+        const data = JSON.stringify({
+          type: "Actor",
+          id: actorId,
+          actorType: actor.type,
+        });
+        ev.dataTransfer.setData("text/plain", data); // 타입과 ID 포함
+      });
+    });
+
+    html.find(".drop-zone").on("drop", this._onPilotDrop.bind(this));
+    // Update Inventory Item
+    html.on("change", ".toggle-equipped", (ev) => {
+      const input = ev.currentTarget;
+      const itemId = input.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      item.update({ "system.equipped": input.checked });
+    });
+
     // Add Inventory Item
     html.on("click", ".item-create", this._onItemCreate.bind(this));
 
@@ -155,6 +177,9 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
       li.slideUp(200, () => this.render(false));
     });
 
+    // 아이템 내용을 표시하는 이벤트 리스너 연결
+    html.on("click", ".view-item", this._onViewItem.bind(this));
+
     // Active Effect management
     html.on("click", ".effect-control", (ev) => {
       const row = ev.currentTarget.closest("li");
@@ -165,8 +190,75 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
       onManageActiveEffect(ev, document);
     });
 
+    // 대미지 굴림 버튼 클릭 이벤트
+    html.on("click", ".roll-damage", async (ev) => {
+      const itemId = $(ev.currentTarget).data("item-id");
+      const item = this.actor.items.get(itemId);
+
+      // 대미지 굴림 대화문 렌더링
+      const dialogTemplate =
+        "systems/metallic-guardian/templates/dialogs/damageDialog.hbs";
+      const dialogData = {
+        itemName: item.name,
+        mainDamage:
+          `<${item.system.main.type}> + ${item.system.main.damage}` ||
+          "주대미지 없음",
+        subDamage:
+          `<${item.system.sub.type}> + ${item.system.sub.damage}` ||
+          "부대미지 없음",
+      };
+
+      const html = await renderTemplate(dialogTemplate, dialogData);
+
+      // 대미지 굴림 대화문 생성
+      new Dialog({
+        title: `${item.name} 대미지 굴림`,
+        content: html,
+        buttons: {
+          rollMain: {
+            icon: '<i class="fas fa-dice-d20"></i>',
+            label: "주대미지",
+            callback: async () => {
+              const damageRoll = new Roll(`2d6 + @base`, {
+                base:
+                  item.system.main.damage +
+                  this.actor.system["battle-stats"].damage.added,
+              });
+              damageRoll.toMessage({
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                flavor: `${item.name} 주대미지 롤 속성: ${item.system.main.type}`,
+              });
+            },
+          },
+          rollSub: {
+            icon: '<i class="fas fa-dice-d20"></i>',
+            label: "부대미지",
+            callback: async () => {
+              const damageRoll = new Roll(`2d6 + @base`, {
+                base:
+                  item.system.sub.damage +
+                  this.actor.system["battle-stats"].damage.added,
+              });
+              damageRoll.toMessage({
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                flavor: `${item.name} 부대미지 롤 속성: ${item.system.sub.type}`,
+              });
+            },
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "취소",
+          },
+        },
+        default: "rollMain",
+      }).render(true);
+    });
+
     // Rollable abilities.
     html.on("click", ".rollable", this._onRoll.bind(this));
+
+    // New Initiative event listener
+    html.on("click", ".rollInitiative", this._onInitiativeRoll.bind(this));
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -205,36 +297,252 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
   }
-
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const dataset = element.dataset;
+    const rollType = element.dataset.action;
 
-    // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == "item") {
-        const itemId = element.closest(".item").dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
+    // Define base stats for roll based on rollType
+    let baseStat = 0;
+    if (rollType.includes("Roll")) {
+      const ability = rollType.replace("Roll", ""); // 'strRoll' -> 'str'
+      baseStat = this.actor.system.attributes[ability].mod;
+    } else {
+      baseStat = this.actor.system["battle-stats"][rollType].total;
     }
 
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : "";
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get("core", "rollMode"),
-      });
-      return roll;
+    // Prepare data for the dialog
+    const dialogTemplate =
+      "systems/metallic-guardian/templates/dialogs/rollDialog.hbs";
+    const dialogData = { rollType };
+
+    // Render dialog for modifier input
+    const html = await renderTemplate(dialogTemplate, dialogData);
+    let modifier = 0;
+
+    // Create dialog
+    new Dialog({
+      title: `${rollType} 판정`,
+      content: html,
+      buttons: {
+        roll: {
+          icon: '<i class="fas fa-dice-d20"></i>',
+          label: "Roll",
+          callback: async (html) => {
+            modifier = parseInt(html.find('input[name="modifier"]').val()) || 0;
+
+            // Roll the dice (2d6 + base stat + modifier)
+            const roll = new Roll(`2d6 + @base + @modifier`, {
+              base: baseStat,
+              modifier: modifier,
+            });
+
+            roll.toMessage({
+              speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+              flavor: `${rollType} 판정 결과`,
+            });
+          },
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: "Cancel",
+        },
+      },
+      default: "roll",
+    }).render(true);
+  }
+
+  /**
+   * Handle Initiative Roll and register in Combat Tracker.
+   * @private
+   */
+  async _onInitiativeRoll() {
+    // Get the actor's initiative value
+    const initiative = this.actor.system["battle-stats"].initiative.added;
+
+    // Ensure the actor is part of the combat
+    if (!game.combat) {
+      ui.notifications.error("No active combat encounter found.");
+      return;
     }
+
+    const combatant = game.combat.getCombatantByActor(this.actor.id);
+
+    if (!combatant) {
+      ui.notifications.error(
+        "This actor is not part of the current encounter."
+      );
+      return;
+    }
+
+    // Register the initiative value in the encounter
+    await game.combat.setInitiative(combatant.id, initiative);
+    ui.notifications.info(
+      `${this.actor.name}'s initiative set to ${initiative}`
+    );
+  }
+
+  async _onPilotDrop(event) {
+    event.preventDefault();
+
+    // 드래그앤드롭된 데이터에서 액터 UUID 정보 추출
+    const data = JSON.parse(
+      event.originalEvent.dataTransfer.getData("text/plain")
+    );
+
+    // 드래그된 데이터가 액터인지 확인
+    if (data.type !== "Actor") {
+      return ui.notifications.warn("유효하지 않은 액터입니다.");
+    }
+
+    // UUID를 이용해 액터를 가져옴
+    const actor = await fromUuid(data.uuid);
+
+    // 드래그된 액터가 linkage 타입인지 확인
+    if (!actor || actor.type !== "linkage") {
+      return ui.notifications.warn(
+        "파일럿으로 등록할 수 있는 linkage 타입의 액터만 가능합니다."
+      );
+    }
+
+    // 파일럿으로 등록
+    await this.actor.update({
+      "system.pilot": { name: actor.name, id: actor.id },
+    });
+
+    ui.notifications.info(`${actor.name}을(를) 파일럿으로 등록했습니다.`);
+  }
+
+  async _onRemovePilot(event) {
+    event.preventDefault();
+
+    // 파일럿 필드를 비움
+    await this.actor.update({ "system.pilot": { name: "", id: "" } });
+
+    // 알림 메시지 출력
+    ui.notifications.info("파일럿이 제거되었습니다.");
+
+    // 시트 다시 렌더링
+    this.render(false);
+  }
+
+  /**
+   * 아이템의 내용을 채팅 창에 요약해서 표시하는 함수
+   * @param {Event} event   클릭 이벤트
+   */
+  _onViewItem(event) {
+    // 클릭된 아이템의 ID를 가져옴
+    const itemId = $(event.currentTarget).data("item-id");
+
+    // 액터의 아이템 목록에서 해당 아이템을 찾음
+    const item = this.actor.items.get(itemId);
+
+    if (!item) return;
+
+    // 아이템 종류에 따라 메시지 분기 처리
+    let messageContent = `<h2>${item.name}</h2>`;
+
+    switch (item.type) {
+      case "gear": // Gear 타입 아이템 처리
+        messageContent += `
+        <p><strong>타이밍:</strong> ${item.system.timing}</p>
+        <p><strong>종류:</strong> ${item.system.type}</p>
+        <p><strong>구입 난이도:</strong> ${item.system["buy-difficulty"]}</p>
+        <p><strong>상비포인트:</strong> ${item.system.price}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      case "human-weapon": // Human Weapon 타입 아이템 처리
+        messageContent += `
+        <p><strong>종류:</strong> ${item.system["weapon-type"]}</p>
+        <p><strong>사정거리:</strong> ${item.system.range}</p>
+        <p><strong>부위:</strong> ${item.system.part}</p>
+        <p><strong>소모:</strong> ${item.system.cost}</p>
+        <p><strong>주공격:</strong> ${item.system.main.type} - 피해량: ${item.system.main.damage}</p>
+        <p><strong>부공격:</strong> ${item.system.sub.type} - 피해량: ${item.system.sub.damage}</p>
+        <p><strong>구입 난이도:</strong> ${item.system["buy-difficulty"]}</p>
+        <p><strong>상비포인트:</strong> ${item.system.price}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      case "human-armor": // Human Armor 타입 아이템 처리
+        messageContent += `
+        <p><strong>참격 방어:</strong> ${item.system.defense.slash}</p>
+        <p><strong>관통 방어:</strong> ${item.system.defense.pierce}</p>
+        <p><strong>타격 방어:</strong> ${item.system.defense.blunt}</p>
+        <p><strong>화염 방어:</strong> ${item.system.defense.fire}</p>
+        <p><strong>얼음 방어:</strong> ${item.system.defense.ice}</p>
+        <p><strong>번개 방어:</strong> ${item.system.defense.electric}</p>
+        <p><strong>광휘 방어:</strong> ${item.system.defense.light}</p>
+        <p><strong>어둠 방어:</strong> ${item.system.defense.dark}</p>
+        <p><strong>구입 난이도:</strong> ${item.system["buy-difficulty"]}</p>
+        <p><strong>상비포인트:</strong> ${item.system.price}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      case "skill": // Skill 타입 아이템 처리
+        messageContent += `
+        <p><strong>레벨:</strong> ${item.system.level}</p>
+        <p><strong>타이밍:</strong> ${item.system.timing}</p>
+        <p><strong>사정거리:</strong> ${item.system.range}</p>
+        <p><strong>종류:</strong> ${item.system.type}</p>
+        <p><strong>대상:</strong> ${item.system.target}</p>
+        <p><strong>코스트:</strong> ${item.system.cost}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      case "guardian-weapon": // Guardian Weapon 타입 아이템 처리
+        messageContent += `
+        <p><strong>종류:</strong> ${item.system["weapon-type"]}</p>
+        <p><strong>사정거리:</strong> ${item.system.range}</p>
+        <p><strong>부위:</strong> ${item.system.part}</p>
+        <p><strong>소모:</strong> ${item.system.cost}</p>
+        <p><strong>주공격:</strong> ${item.system.main.type} - 피해량: ${item.system.main.damage}</p>
+        <p><strong>부공격:</strong> ${item.system.sub.type} - 피해량: ${item.system.sub.damage}</p>
+        <p><strong>구입 난이도:</strong> ${item.system["buy-difficulty"]}</p>
+        <p><strong>상비포인트:</strong> ${item.system.price}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      case "guardian-option": // Guardian Option 타입 아이템 처리
+        messageContent += `
+        <p><strong>역장:</strong> ${item.system["battle-stats"].field}</p>
+        <p><strong>감응:</strong> ${item.system["battle-stats"].response}</p>
+        <p><strong>공격력:</strong> ${item.system["battle-stats"].damage}</p>
+        <p><strong>이동력:</strong> ${item.system["battle-stats"].speed}</p>
+        <p><strong>참격 방어:</strong> ${item.system.defense.slash}</p>
+        <p><strong>관통 방어:</strong> ${item.system.defense.pierce}</p>
+        <p><strong>타격 방어:</strong> ${item.system.defense.blunt}</p>
+        <p><strong>화염 방어:</strong> ${item.system.defense.fire}</p>
+        <p><strong>얼음 방어:</strong> ${item.system.defense.ice}</p>
+        <p><strong>번개 방어:</strong> ${item.system.defense.electric}</p>
+        <p><strong>광휘 방어:</strong> ${item.system.defense.light}</p>
+        <p><strong>어둠 방어:</strong> ${item.system.defense.dark}</p>
+        <p><strong>구입 난이도:</strong> ${item.system["buy-difficulty"]}</p>
+        <p><strong>상비포인트:</strong> ${item.system.price}</p>
+        <p><strong>효과:</strong> ${item.system.description}</p>
+      `;
+        break;
+
+      default: // 기본 메시지 처리
+        messageContent += `<p><strong>효과:</strong> ${item.system.description}</p>`;
+        break;
+    }
+
+    // 채팅 메시지 생성 및 표시
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: messageContent,
+    });
   }
 }

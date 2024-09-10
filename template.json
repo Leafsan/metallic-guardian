@@ -230,6 +230,7 @@
     "types": [
       "human-weapon",
       "human-armor",
+      "guardian-model",
       "guardian-weapon",
       "guardian-option",
       "gear",
@@ -251,7 +252,7 @@
         "range": "",
         "cost": ""
       },
-      "stat": {
+      "battle-stats": {
         "battle-stats": {
           "accuracy": 0,
           "evasion": 0,
@@ -288,20 +289,30 @@
     }
   },
   "human-weapon": {
-    "templates": ["base", "attack", "stat", "buyable"],
+    "templates": ["base", "attack", "battle-stats", "buyable"],
     "weapon-type": "",
     "equipped": false
   },
   "human-armor": {
-    "templates": ["base", "defense", "stat", "buyable"],
+    "templates": ["base", "defense", "battle-stats", "buyable"],
     "equipped": false
   },
+  "guardian-model": {
+    "templates": ["base", "defense", "battle-stats", "buyable"],
+    "battle-status": {
+      "field": 0,
+      "response": 0,
+      "damage": 0,
+      "speed": 0
+    },
+    "size": ""
+  },
   "guardian-weapon": {
-    "templates": ["base", "attack", "defense", "stat", "buyable"],
+    "templates": ["base", "attack", "defense", "battle-stats", "buyable"],
     "equipped": false
   },
   "guardian-option": {
-    "templates": ["base", "defense", "stat", "buyable"],
+    "templates": ["base", "defense", "battle-stats", "buyable"],
     "battle-status": {
       "field": 0,
       "response": 0,

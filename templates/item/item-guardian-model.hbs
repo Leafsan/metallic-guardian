@@ -1,0 +1,161 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
+    </div>
+  </header>
+
+
+    {{> "systems/metallic-guardian/templates/item/parts/item-stats.hbs"}}
+    <section class="sheet-stats grid grid-4col">
+    <div class="stat-label">역장</div>
+    <div class="stat-label">감응</div>
+    <div class="stat-label">공격력</div>
+    <div class="stat-label">이동력</div>
+
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.battle-stats.field"
+        value="{{system.battle-stats.field}}"
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.battle-stats.response"
+        value="{{system.battle-stats.response}}"
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.battle-stats.damage"
+        value="{{system.battle-stats.damage}}"
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.battle-stats.speed"
+        value="{{system.battle-stats.speed}}"
+      />
+    </div>
+    </section>
+    <section class="sheet-stats grid grid-8col">
+      <div class="stat-header grid-span-8">방어수정</div>
+
+      <div class="stat-label">참격</div>
+      <div class="stat-label">관통</div>
+      <div class="stat-label">타격</div>
+      <div class="stat-label">화염</div>
+      <div class="stat-label">얼음</div>
+      <div class="stat-label">번개</div>
+      <div class="stat-label">광휘</div>
+      <div class="stat-label">어둠</div>
+
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.slash"
+          value="{{system.defense.slash}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.pierce"
+          value="{{system.defense.pierce}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.blunt"
+          value="{{system.defense.blunt}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.fire"
+          value="{{system.defense.fire}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.ice"
+          value="{{system.defense.ice}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.electric"
+          value="{{system.defense.electric}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.light"
+          value="{{system.defense.light}}"
+        />
+      </div>
+      <div class="stat-value">
+        <input
+          type="number"
+          name="system.defense.dark"
+          value="{{system.defense.dark}}"
+        />
+      </div>
+    </section>
+    <section class="sheet-stats grid grid-4col">
+
+    <!-- 구입난이도 -->
+    <div class="stat-label">구입난이도</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.buy-difficulty"
+        value="{{system.buy-difficulty}}"
+        data-dtype="String"
+        />
+    </div>
+
+    <!-- 상비포인트 -->
+    <div class="stat-label">상비포인트</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.price"
+        value="{{system.price}}"
+        data-dtype="String"
+        />
+    </div>
+    </section>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">효과</a>
+    <a class="item" data-tab="effects">이펙트</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+    {{!-- TinyMCE를 통한 텍스트 입력 부분 --}}
+    {{editor enrichments.description target="system.description" rollData=rollData button=true owner=owner editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{!-- As you add new fields, add them in here! --}}
+      {{> "systems/metallic-guardian/templates/item/parts/item-effects.hbs"}}
+    </div>
+  </section>
+</form>

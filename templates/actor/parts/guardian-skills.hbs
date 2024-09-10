@@ -1,0 +1,58 @@
+<ol class="items-list">
+  <!-- 스킬 목록 헤더 -->
+  <li class="item grid grid-7col items-header">
+    <div class="item-name grid-span-3">특기</div>
+    <div class="item-name">타이밍</div>
+    <div class="item-name grid-span-2">코스트</div>
+    <div class="item-controls">
+      <a
+        class="item-control item-create"
+        title="Create Skill"
+        data-type="skill"
+      ><i class="fas fa-plus"></i>
+        추가</a>
+    </div>
+  </li>
+
+  <!-- 스킬 목록 출력 -->
+  {{#each skills as |item id|}}
+    <li class="item grid grid-7col" data-item-id="{{item._id}}">
+      <!-- 스킬 이름과 이미지 -->
+      <div class="item-name grid-span-3">
+        <div class="item-image">
+          <a class="view-item" data-item-id="{{item._id}}">
+            <img
+              src="{{item.img}}"
+              title="{{item.name}}"
+              width="24"
+              height="24"
+            />
+          </a>
+        </div>
+        <a class="item-control item-edit">
+          <h4>{{item.name}}</h4>
+        </a>
+      </div>
+
+      <!-- 스킬 타이밍 -->
+      <div class="item-timing">
+        <h4>{{item.system.timing}}</h4>
+      </div>
+
+      <!-- 스킬 체크 타입 (사용 방식) -->
+      <div class="item-cost grid-span-2">
+        <h4>{{item.system.cost}}</h4>
+      </div>
+
+      <!-- 스킬 편집 및 삭제 버튼 -->
+      <div class="item-controls">
+        <a class="item-control item-edit" title="Edit Skill"><i
+            class="fas fa-edit"
+          ></i></a>
+        <a class="item-control item-delete" title="Delete Skill"><i
+            class="fas fa-trash"
+          ></i></a>
+      </div>
+    </li>
+  {{/each}}
+</ol>
