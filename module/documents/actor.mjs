@@ -294,6 +294,53 @@ export class MetallicGuardianActor extends Actor {
   }
 
   _computeBattleStats(actorData) {
+    function sumStats(items, stats) {
+      return items.reduce((acc, item) => {
+        stats.forEach((stat) => {
+          // 해당 속성이 존재하면 합산
+          acc[stat] =
+            (acc[stat] || 0) + (item.system["battle-stats"][stat] || 0);
+        });
+        return acc;
+      }, {});
+    }
+
+    function sumDefense(items, defenses) {
+      return items.reduce((acc, item) => {
+        defenses.forEach((defense) => {
+          // 해당 방어력이 존재하면 합산
+          acc[defense] =
+            (acc[defense] || 0) + (item.system["defense"][defense] || 0);
+        });
+        return acc;
+      }, {});
+    }
+
+    // 합산할 속성 리스트 정의
+    const stats = [
+      "accuracy",
+      "evasion",
+      "artillery",
+      "defense",
+      "initiative",
+      "field",
+      "durability",
+      "response",
+      "damage",
+      "speed",
+    ]; // 예시 속성들
+
+    const defenseStats = [
+      "slash",
+      "pierce",
+      "blunt",
+      "fire",
+      "ice",
+      "electric",
+      "light",
+      "dark",
+    ]; // 예시 방어력들
+
     const system = actorData.system;
     const classes = system.class;
     const battleStats = system["battle-stats"];
@@ -305,36 +352,24 @@ export class MetallicGuardianActor extends Actor {
       (equip) => equip.system.equipped
     );
 
-    const stats = {
-      accuracy: { base: 0, total: 0, added: 0 },
-      evasion: { base: 0, total: 0, added: 0 },
-      artillery: { base: 0, total: 0, added: 0 },
-      defense: { base: 0, total: 0, added: 0 },
-      initiative: { base: 0, total: 0, added: 0 },
-      field: { base: 0, total: 0, added: 0 },
-      durability: { base: 0, total: 0, added: 0 },
-      response: { base: 0, total: 0, added: 0 },
-      damage: { base: 0, total: 0, added: 0 },
-    };
-
     // Calculate base battle stats
-    stats.accuracy.base = Math.floor(
+    battleStats.accuracy.base = Math.floor(
       (attributes.dex.mod + attributes.per.mod) / 2
     );
-    stats.evasion.base = Math.floor(
+    battleStats.evasion.base = Math.floor(
       (attributes.dex.mod + attributes.luk.mod) / 2
     );
-    stats.artillery.base = Math.floor(
+    battleStats.artillery.base = Math.floor(
       (attributes.per.mod + attributes.int.mod) / 2
     );
-    stats.defense.base = Math.floor(
+    battleStats.defense.base = Math.floor(
       (attributes.int.mod + attributes.luk.mod) / 2
     );
-    stats.initiative.base = attributes.dex.mod + attributes.int.mod;
-    stats.field.base = 0;
-    stats.durability.base = attributes.str.value;
-    stats.response.base = attributes.wil.value;
-    stats.damage.base = 0;
+    battleStats.initiative.base = attributes.dex.mod + attributes.int.mod;
+    battleStats.field.base = 0;
+    battleStats.durability.base = attributes.str.value;
+    battleStats.response.base = attributes.wil.value;
+    battleStats.damage.base = 0;
 
     // Helper function to calculate class contribution
     const addClassStats = (stat) =>
@@ -342,59 +377,131 @@ export class MetallicGuardianActor extends Actor {
       (classes.second[stat] || 0) +
       (classes.third[stat] || 0);
 
-    // Calculate total battle stats
-    Object.keys(stats).forEach((stat) => {
-      stats[stat].total = stats[stat].base + addClassStats(stat);
-    });
+    battleStats.accuracy.class = addClassStats("accuracy");
+    battleStats.evasion.class = addClassStats("evasion");
+    battleStats.artillery.class = addClassStats("artillery");
+    battleStats.defense.class = addClassStats("defense");
+    battleStats.initiative.class = addClassStats("initiative");
+    battleStats.field.class = addClassStats("field");
+    battleStats.durability.class = addClassStats("durability");
+    battleStats.response.class = addClassStats("response");
+    battleStats.damage.class = addClassStats("damage");
 
-    // Assign back to battleStats
-    Object.keys(stats).forEach((stat) => {
-      battleStats[stat].base = stats[stat].base;
-      battleStats[stat].total = stats[stat].total + battleStats[stat].mod;
-    });
+    battleStats.accuracy.total =
+      battleStats.accuracy.base +
+      battleStats.accuracy.class +
+      battleStats.accuracy.mod;
 
-    Object.keys(stats).forEach((stat) => {
-      const weaponBonus = weapons.reduce(
-        (acc, weapon) =>
-          acc + (Number(weapon.system["battle-stats"][stat]) || 0),
-        0
-      );
-      const armorBonus = armors.reduce(
-        (acc, armor) => acc + (Number(armor.system["battle-stats"][stat]) || 0),
-        0
-      );
+    battleStats.evasion.total =
+      battleStats.evasion.base +
+      battleStats.evasion.class +
+      battleStats.evasion.mod;
 
-      // Calculate total added stat
-      battleStats[stat].added =
-        battleStats[stat].total + weaponBonus + armorBonus;
+    battleStats.artillery.total =
+      battleStats.artillery.base +
+      battleStats.artillery.class +
+      battleStats.artillery.mod;
 
-      // Calculate speed
-      battleStats.speed.value = Math.floor(attributes.str.mod / 3);
-      battleStats.speed.full = 1 + Math.floor(attributes.str.mod / 3);
+    battleStats.defense.total =
+      battleStats.defense.base +
+      battleStats.defense.class +
+      battleStats.defense.mod;
 
-      system.HP.max = battleStats.durability.added;
-    });
+    battleStats.initiative.total =
+      battleStats.initiative.base +
+      battleStats.initiative.class +
+      battleStats.initiative.mod;
 
-    const defenses = [
-      "slash",
-      "pierce",
-      "blunt",
-      "fire",
-      "ice",
-      "electric",
-      "light",
-      "dark",
-    ]; // 예시 방어력들
+    battleStats.field.total =
+      battleStats.field.base + battleStats.field.class + battleStats.field.mod;
 
-    Object.keys(defenses).forEach((def) => {
-      const armorBonus = armors.reduce(
-        (acc, armor) => acc + (Number(armor.system.defense[def]) || 0),
-        0
-      );
+    battleStats.durability.total =
+      battleStats.durability.base +
+      battleStats.durability.class +
+      battleStats.durability.mod;
 
-      console.log(armorBonus);
+    battleStats.response.total =
+      battleStats.response.base +
+      battleStats.response.class +
+      battleStats.response.mod;
 
-      system.defense[def].total = armorBonus;
-    });
+    battleStats.damage.total =
+      battleStats.damage.base +
+      battleStats.damage.class +
+      battleStats.damage.mod;
+
+    // Calculate weapon and armor contributions
+    const totalWeaponStats = sumStats(weapons, stats);
+    const totalArmorStats = sumStats(armors, stats);
+
+    battleStats.accuracy.added =
+      battleStats.accuracy.total +
+      (totalWeaponStats.accuracy ?? 0) +
+      (totalArmorStats.accuracy ?? 0);
+
+    battleStats.evasion.added =
+      battleStats.evasion.total +
+      (totalWeaponStats.evasion ?? 0) +
+      (totalArmorStats.evasion ?? 0);
+
+    battleStats.artillery.added =
+      battleStats.artillery.total +
+      (totalWeaponStats.artillery ?? 0) +
+      (totalArmorStats.artillery ?? 0);
+
+    battleStats.defense.added =
+      battleStats.defense.total +
+      (totalWeaponStats.defense ?? 0) +
+      (totalArmorStats.defense ?? 0);
+
+    battleStats.initiative.added =
+      battleStats.initiative.total +
+      (totalWeaponStats.initiative ?? 0) +
+      (totalArmorStats.initiative ?? 0);
+
+    battleStats.field.added =
+      battleStats.field.total +
+      (totalWeaponStats.field ?? 0) +
+      (totalArmorStats.field ?? 0);
+
+    battleStats.durability.added =
+      battleStats.durability.total +
+      (totalWeaponStats.durability ?? 0) +
+      (totalArmorStats.durability ?? 0);
+
+    battleStats.response.added =
+      battleStats.response.total +
+      (totalWeaponStats.response ?? 0) +
+      (totalArmorStats.response ?? 0);
+
+    battleStats.damage.added =
+      battleStats.damage.total +
+      (totalWeaponStats.damage ?? 0) +
+      (totalArmorStats.damage ?? 0);
+
+    // Calculate speed
+    battleStats.speed.value = Math.floor(attributes.str.mod / 3);
+    battleStats.speed.full = 1 + Math.floor(attributes.str.mod / 3);
+
+    system.HP.max = battleStats.durability.added;
+
+    const totalDefenseStats = sumDefense(armors, defenseStats);
+
+    system.defense.slash.total =
+      (totalDefenseStats.slash ?? 0) + system.defense.slash.mod;
+    system.defense.pierce.total =
+      (totalDefenseStats.pierce ?? 0) + system.defense.pierce.mod;
+    system.defense.blunt.total =
+      (totalDefenseStats.blunt ?? 0) + system.defense.blunt.mod;
+    system.defense.fire.total =
+      (totalDefenseStats.fire ?? 0) + system.defense.fire.mod;
+    system.defense.ice.total =
+      (totalDefenseStats.ice ?? 0) + system.defense.ice.mod;
+    system.defense.electric.total =
+      (totalDefenseStats.electric ?? 0) + system.defense.electric.mod;
+    system.defense.light.total =
+      (totalDefenseStats.light ?? 0) + system.defense.light.mod;
+    system.defense.dark.total =
+      (totalDefenseStats.dark ?? 0) + system.defense.dark.mod;
   }
 }
