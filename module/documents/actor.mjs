@@ -83,6 +83,11 @@ export class MetallicGuardianActor extends Actor {
       "artillery",
       "defense",
       "initiative",
+      "field",
+      "durability",
+      "response",
+      "damage",
+      "speed",
     ]; // 예시 속성들
 
     const defenseStats = [
@@ -156,13 +161,94 @@ export class MetallicGuardianActor extends Actor {
       (totalOptionStats.initiative ?? 0) +
       system["battle-stats"].initiative.mod;
 
-    system.defense.slash =
-      (model?.system.defense.slash ?? 0) + (totalOptionDefenses.slash ?? 0);
+    system["battle-stats"].damage.added =
+      (pilot?.["battle-stats"].damage.total ?? 0) +
+      (model?.system["battle-stats"].damage ?? 0) +
+      (totalOptionStats.damage ?? 0) +
+      system["battle-stats"].damage.mod;
 
-    console.log(Number(model?.system["defense"].slash));
-    console.log(Number(totalOptionDefenses.slash));
+    system.defense.slash.total =
+      (model?.system.defense.slash ?? 0) +
+      (totalOptionDefenses.slash ?? 0) +
+      system.defense.slash.mod;
 
-    console.log("Options def : ", totalOptionDefenses);
+    system.defense.pierce.total =
+      (model?.system.defense.pierce ?? 0) +
+      (totalOptionDefenses.pierce ?? 0) +
+      system.defense.pierce.mod;
+
+    system.defense.blunt.total =
+      (model?.system.defense.blunt ?? 0) +
+      (totalOptionDefenses.blunt ?? 0) +
+      system.defense.blunt.mod;
+
+    system.defense.fire.total =
+      (model?.system.defense.fire ?? 0) +
+      (totalOptionDefenses.fire ?? 0) +
+      system.defense.fire.mod;
+
+    system.defense.ice.total =
+      (model?.system.defense.ice ?? 0) +
+      (totalOptionDefenses.ice ?? 0) +
+      system.defense.ice.mod;
+
+    system.defense.electric.total =
+      (model?.system.defense.electric ?? 0) +
+      (totalOptionDefenses.electric ?? 0) +
+      system.defense.electric.mod;
+
+    system.defense.light.total =
+      (model?.system.defense.light ?? 0) +
+      (totalOptionDefenses.light ?? 0) +
+      system.defense.light.mod;
+
+    system.defense.dark.total =
+      (model?.system.defense.dark ?? 0) +
+      (totalOptionDefenses.dark ?? 0) +
+      system.defense.dark.mod;
+
+    system["battle-stats"].field.total =
+      (pilot?.["battle-stats"].field.total ?? 0) +
+      (model?.system["battle-stats"].field ?? 0) +
+      (totalWeaponStats.field ?? 0) +
+      (totalOptionStats.field ?? 0) +
+      system["battle-stats"].field.mod;
+
+    system["battle-stats"].durability.total =
+      (pilot?.["battle-stats"].durability.total ?? 0) +
+      (model?.system["battle-stats"].durability ?? 0) +
+      (totalWeaponStats.durability ?? 0) +
+      (totalOptionStats.durability ?? 0) +
+      system["battle-stats"].durability.mod;
+
+    system["battle-stats"].response.total =
+      (pilot?.["battle-stats"].response.total ?? 0) +
+      (model?.system["battle-stats"].response ?? 0) +
+      (totalWeaponStats.response ?? 0) +
+      (totalOptionStats.response ?? 0) +
+      system["battle-stats"].response.mod;
+
+    system["battle-stats"].damage.total =
+      (pilot?.["battle-stats"].damage.total ?? 0) +
+      (model?.system["battle-stats"].damage ?? 0) +
+      (totalWeaponStats.damage ?? 0) +
+      (totalOptionStats.damage ?? 0) +
+      system["battle-stats"].damage.mod;
+
+    system.FP.max = system["battle-stats"].field.total + system.FP.mod;
+    system.HP.max = system["battle-stats"].durability.total + system.HP.mod;
+    system.EN.max = system["battle-stats"].response.total + system.EN.mod;
+
+    system.size = model?.system.size ?? "";
+
+    system["battle-stats"].speed.value =
+      Math.floor(system.attributes.str.mod / 3) +
+      (model?.system["battle-stats"].speed ?? 0) +
+      (totalWeaponStats.speed ?? 0) +
+      (totalOptionStats.speed ?? 0) +
+      system["battle-stats"].speed.mod;
+
+    system["battle-stats"].speed.full = system["battle-stats"].speed.value * 2;
   }
 
   _prepareNpcData(actorData) {

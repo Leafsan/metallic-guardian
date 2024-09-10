@@ -11,7 +11,7 @@
         {{!-- 사이즈 --}}
         <div class="resource flex-group-center">
           <label for="system.size" class="resource-label">사이즈</label>
-          <input type="text" name="system.size" value="{{system.size}}" data-dtype="String"/>
+          <input type="text" name="system.size" value="{{system.size}}" data-dtype="String" readonly/>
         </div>
 
         {{!-- 파일럿 --}}
@@ -40,7 +40,7 @@
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="system.FP.value" value="{{system.FP.value}}" data-dtype="Number"/>
             <span> / </span>
-            <input type="text" name="system.FP.max" value="{{system.FP.max}}" data-dtype="Number"/>
+            <input type="text" name="system.FP.max" value="{{system.FP.max}}" data-dtype="Number" readonly/>
           </div>
         </div>
 
@@ -50,7 +50,7 @@
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="system.HP.value" value="{{system.HP.value}}" data-dtype="Number"/>
             <span> / </span>
-            <input type="text" name="system.HP.max" value="{{system.HP.max}}" data-dtype="Number"/>
+            <input type="text" name="system.HP.max" value="{{system.HP.max}}" data-dtype="Number" readonl/>
           </div>
         </div>
 
@@ -60,7 +60,7 @@
           <div class="resource-content flexrow flex-center flex-between">
             <input type="text" name="system.EN.value" value="{{system.EN.value}}" data-dtype="Number"/>
             <span> / </span>
-            <input type="text" name="system.EN.max" value="{{system.EN.max}}" data-dtype="Number"/>
+            <input type="text" name="system.EN.max" value="{{system.EN.max}}" data-dtype="Number" readonl/>
           </div>
         </div>
 
@@ -68,13 +68,13 @@
           {{!-- 이동력 --}}
           <div class="resource flex-group-center">
             <label for="system.battle-stats.speed.value" class="resource-label">이동력</label>
-            <input type="text" name="system.battle-stats.speed.value" value="{{system.battle-stats.speed.value}}" data-dtype="Number"/>
+            <input type="text" name="system.battle-stats.speed.value" value="{{system.battle-stats.speed.value}}" data-dtype="Number" readonly/>
           </div>
 
           {{!-- 전력이동 --}}
           <div class="resource flex-group-center">
             <label for="system.battle-stats.speed.full" class="resource-label">전력이동</label>
-            <input type="text" name="system.battle-stats.speed.full" value="{{system.battle-stats.speed.full}}" data-dtype="Number"/>
+            <input type="text" name="system.battle-stats.speed.full" value="{{system.battle-stats.speed.full}}" data-dtype="Number" readonly/>
           </div>
         </div>
       </div>
@@ -226,64 +226,64 @@
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.slash"
-          value="{{system.defense.slash}}"
+          name="system.defense.slash.total"
+          value="{{system.defense.slash.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.pierce"
-          value="{{system.defense.pierce}}"
+          name="system.defense.pierce.total"
+          value="{{system.defense.pierce.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.blunt"
-          value="{{system.defense.blunt}}"
+          name="system.defense.blunt.total"
+          value="{{system.defense.blunt.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.fire"
-          value="{{system.defense.fire}}"
+          name="system.defense.fire.total"
+          value="{{system.defense.fire.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.ice"
-          value="{{system.defense.ice}}"
+          name="system.defense.ice.total"
+          value="{{system.defense.ice.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.electric"
-          value="{{system.defense.electric}}"
+          name="system.defense.electric.total"
+          value="{{system.defense.electric.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.light"
-          value="{{system.defense.light}}"
+          name="system.defense.light.total"
+          value="{{system.defense.light.total}}"
           readonly
         />
       </div>
       <div class="stat-value">
         <input
           type="number"
-          name="system.defense.dark"
-          value="{{system.defense.dark}}"
+          name="system.defense.dark.total"
+          value="{{system.defense.dark.total}}"
           readonly
         />
       </div>

@@ -19,7 +19,7 @@ export class MetallicGuardianCombat extends Combat {
 
       let Init;
       if (c.actor.type === "linkage" || c.actor.type === "guardian") {
-        Init = c.actor.system["battle-stats"].initiative.total ?? 0;
+        Init = c.actor.system["battle-stats"].initiative.added ?? 0;
       } else {
         Init = c.actor.system["battle-stats"].initiative ?? 0;
       }

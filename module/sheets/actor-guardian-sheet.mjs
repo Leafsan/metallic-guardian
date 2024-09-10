@@ -396,46 +396,6 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
     );
   }
 
-  // async _onModelDrop(event) {
-  //   event.preventDefault();
-
-  //   // 드래그앤드롭된 데이터에서 액터 UUID 정보 추출
-  //   const data = JSON.parse(
-  //     event.originalEvent.dataTransfer.getData("text/plain")
-  //   );
-
-  //   console.log("Data : ", data);
-
-  //   // 드래그된 데이터가 액터인지 확인
-  //   if (data.type !== "Item") {
-  //     return ui.notifications.warn("유효하지 않은 아이템입니다.");
-  //   }
-
-  //   // UUID를 이용해 액터를 가져옴
-  //   const item = await fromUuid(data.uuid);
-
-  //   // 드래그된 액터가 linkage 타입인지 확인
-  //   if (!item || item.type !== "guardian-model") {
-  //     return ui.notifications.warn(
-  //       "모델로 등록할 수 있는 guardian-model 타입의 아이템만 가능합니다."
-  //     );
-  //   }
-
-  //   console.log("Item : ", item);
-
-  //   // 모델로 등록
-  //   await this.actor.update({
-  //     "system.model": { name: item.name, id: item.id },
-  //   });
-
-  //   console.log(
-  //     "Items : ",
-  //     this.actor.items.toObject().filter((i) => i.type === "guardian-model")
-  //   );
-
-  //   ui.notifications.info(`${item.name}을(를) 모델로 등록했습니다.`);
-  // }
-
   /**
    * Handle model removal when the remove button is clicked
    * @param {Event} event The originating click event
