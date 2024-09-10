@@ -374,5 +374,27 @@ export class MetallicGuardianActor extends Actor {
 
       system.HP.max = battleStats.durability.added;
     });
+
+    const defenses = [
+      "slash",
+      "pierce",
+      "blunt",
+      "fire",
+      "ice",
+      "electric",
+      "light",
+      "dark",
+    ]; // 예시 방어력들
+
+    Object.keys(defenses).forEach((def) => {
+      const armorBonus = armors.reduce(
+        (acc, armor) => acc + (Number(armor.system.defense[def]) || 0),
+        0
+      );
+
+      console.log(armorBonus);
+
+      system.defense[def].total = armorBonus;
+    });
   }
 }
