@@ -223,7 +223,17 @@
       ],
       "level": 1,
       "type": "",
-      "size": ""
+      "size": "",
+      "FP": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      },
+      "EN": {
+        "value": 0,
+        "max": 0,
+        "mod": 0
+      }
     }
   },
   "Item": {
@@ -262,7 +272,8 @@
         }
       },
       "attack": {
-        "attackType": "main",
+        "attack-type": "",
+        "equip-position": "",
         "part": "",
         "main": {
           "type": "",

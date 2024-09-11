@@ -13,6 +13,7 @@ export const preloadHandlebarsTemplates = async function () {
     "systems/metallic-guardian/templates/actor/parts/actor-effects.hbs",
     "systems/metallic-guardian/templates/actor/parts/guardian-model.hbs",
     "systems/metallic-guardian/templates/actor/parts/guardian-skills.hbs",
+    "systems/metallic-guardian/templates/actor/parts/enemy-combats.hbs",
     // Item partials
     "systems/metallic-guardian/templates/item/parts/item-effects.hbs",
     "systems/metallic-guardian/templates/item/parts/item-stats.hbs",

@@ -5,6 +5,28 @@
       <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name" /></h1>
     </div>
   </header>
+  
+  <section class="sheet-stats grid-4col flexrow">
+    <div class="stat-label">무장 가능 위치</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.equip-position"
+        value="{{system.equip-position}}"
+        data-dtype="String"
+        />
+    </div>
+    <!-- 주무장/부무장 표시 -->
+    <div class="stat-label">현재 무장 위치 표시</div>
+    <div class="stat-value">
+        <input
+        type="text"
+        name="system.attack-type"
+        value="{{system.attack-type}}"
+        data-dtype="String"
+        />
+    </div>
+  </section>
 
     {{> "systems/metallic-guardian/templates/item/parts/item-stats.hbs"}}
 

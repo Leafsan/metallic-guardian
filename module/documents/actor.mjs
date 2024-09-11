@@ -23,6 +23,7 @@ export class MetallicGuardianActor extends Actor {
     // Make separate methods for each Actor type to keep things organized.
     this._prepareCharacterData(actorData);
     this._prepareGuardianData(actorData);
+    this._prepareEnemyData(actorData);
     this._prepareNpcData(actorData);
   }
 
@@ -249,6 +250,24 @@ export class MetallicGuardianActor extends Actor {
       system["battle-stats"].speed.mod;
 
     system["battle-stats"].speed.full = system["battle-stats"].speed.value * 2;
+  }
+
+  _prepareEnemyData(actorData) {
+    if (actorData.type !== "enemy") return;
+
+    const system = actorData.system;
+    const str = system.attributes.str.value;
+    const dex = system.attributes.dex.value;
+    const per = system.attributes.per.value;
+    const int = system.attributes.int.value;
+    const wil = system.attributes.wil.value;
+    const luk = system.attributes.luk.value;
+
+    if (system.attributes) {
+      for (let [k] of Object.entries(system.attributes)) {
+        system.attributes[k].mod = Math.floor(system.attributes[k].value / 3);
+      }
+    }
   }
 
   _prepareNpcData(actorData) {

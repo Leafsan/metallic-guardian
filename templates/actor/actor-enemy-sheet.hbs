@@ -1,7 +1,7 @@
-<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+<form class="{{cssClass}} {{actor.type}} flexcol" autocoENlete="off">
 
   {{! Sheet Header }}
-  <header class="sheet-header">
+  <header class="sheet-header grid grid-3col">
     <img
       class="profile-img"
       src="{{actor.img}}"
@@ -10,7 +10,7 @@
       height="100"
       width="100"
     />
-    <div class="header-fields">
+    <div class="header-fields flexcol">
       <h1 class="charname">
         <input
           name="name"
@@ -20,23 +20,363 @@
         />
       </h1>
 
-      {{! 외견 }}
-      <div class="resource flexcol">
-        <label for="system.appearance" class="resource-label">외견</label>
-        <textarea name="system.appearance">{{system.appearance}}</textarea>
-      </div>
+      {{! 종류, 레벨, 사이즈 }}
+      <div class="grid grid-3col" style="gap: 10px;">
+        <div class="resource flexcol">
+          <label for="system.type" class="resource-label">종류</label>
+          <input type="text" name="system.type" value="{{system.type}}" />
+        </div>
 
-      {{! 커버 }}
-      <div class="resource flexcol">
-        <label for="system.cover" class="resource-label">Cover</label>
-        <input type="text" name="system.cover" value="{{system.cover}}" />
+        <div class="resource flexcol">
+          <label for="system.level" class="resource-label">레벨</label>
+          <input type="number" name="system.level" value="{{system.level}}" />
+        </div>
+
+        <div class="resource flexcol">
+          <label for="system.size" class="resource-label">사이즈</label>
+          <input type="text" name="system.size" value="{{system.size}}" />
+        </div>
       </div>
     </div>
   </header>
 
+  {{! FP와 EN 표시란 }}
+  <section class="sheet-stats grid grid-4col" style="gap: 20px; padding: 10px 0;">
+    {{! FP 표시란 }}
+    <div class="FP-container flexcol">
+      <label for="system.FP.value" class="resource-label">FP</label>
+      <div class="flexrow flex-between" style="gap: 5px;">
+        <input
+          type="number"
+          name="system.FP.value"
+          value="{{system.FP.value}}"
+          data-dtype="Number"
+          placeholder="현재값"
+        />
+        <span>/</span>
+        <input
+          type="number"
+          name="system.FP.max"
+          value="{{system.FP.max}}"
+          data-dtype="Number"
+          placeholder="최대값"
+        />
+      </div>
+    </div>
+
+    {{! EN 표시란 }}
+    <div class="EN-container flexcol">
+      <label for="system.EN.value" class="resource-label">EN</label>
+      <div class="flexrow flex-between" style="gap: 5px;">
+        <input
+          type="number"
+          name="system.EN.value"
+          value="{{system.EN.value}}"
+          data-dtype="Number"
+          placeholder="현재값"
+        />
+        <span>/</span>
+        <input
+          type="number"
+          name="system.EN.max"
+          value="{{system.EN.max}}"
+          data-dtype="Number"
+          placeholder="최대값"
+        />
+      </div>
+    </div>
+
+    {{! 이동력과 전력이동 표시란 }}
+    <div class="movement-container flexcol">
+      <label for="system.battle-stats.speed.value" class="resource-label">이동력</label>
+      <input
+        type="number"
+        name="system.battle-stats.speed.value"
+        value="{{system.battle-stats.speed.value}}"
+        data-dtype="Number"
+        placeholder="이동력"
+      />
+    </div>
+
+    <div class="full-movement-container flexcol">
+      <label for="system.battle-stats.speed.full" class="resource-label">전력이동</label>
+      <input
+        type="number"
+        name="system.battle-stats.speed.full"
+        value="{{system.battle-stats.speed.full}}"
+        data-dtype="Number"
+        placeholder="전력이동"
+      />
+    </div>
+  </section>
+
+  {{! 능력치 테이블 영역 }}
+  <section class="attributes-container grid grid-6col">
+
+    {{! 능력치 헤더 }}
+    <button class="attribute-header rollable" data-action="strRoll">체력</button>
+    <button class="attribute-header rollable" data-action="dexRoll">반사</button>
+    <button class="attribute-header rollable" data-action="perRoll">지각</button>
+    <button class="attribute-header rollable" data-action="intRoll">이성</button>
+    <button class="attribute-header rollable" data-action="wilRoll">의지</button>
+    <button class="attribute-header rollable" data-action="lukRoll">행운</button>
+
+    {{! 능력치 값 표시 영역 }}
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.str.value"
+        value="{{system.attributes.str.value}}"
+        data-dtype="Number"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.dex.value"
+        value="{{system.attributes.dex.value}}"
+        data-dtype="Number"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.per.value"
+        value="{{system.attributes.per.value}}"
+        data-dtype="Number"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.int.value"
+        value="{{system.attributes.int.value}}"
+        data-dtype="Number"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.wil.value"
+        value="{{system.attributes.wil.value}}"
+        data-dtype="Number"
+      />
+    </div>
+    <div class="attribute">
+      <input
+        type="text"
+        name="system.attributes.luk.value"
+        value="{{system.attributes.luk.value}}"
+        data-dtype="Number"
+      />
+    </div>
+
+    {{! 능력치 수정치 영역 }}
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.str.mod"
+        value="{{system.attributes.str.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.dex.mod"
+        value="{{system.attributes.dex.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.per.mod"
+        value="{{system.attributes.per.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.int.mod"
+        value="{{system.attributes.int.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.wil.mod"
+        value="{{system.attributes.wil.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+    <div class="attribute-mod">
+      <input
+        type="number"
+        name="system.attributes.luk.mod"
+        value="{{system.attributes.luk.mod}}"
+        data-dtype="Number"
+        readonly
+      />
+    </div>
+
+  </section>
+
+  {{! 판정 버튼 영역 }}
+  <section class="roll-buttons flexrow">
+
+    {{! 명중판정 버튼 }}
+    <div class="roll-button">
+      <button type="button" class="rollable" data-action="accuracy">명중판정</button>
+      <input
+        type="number"
+        name="system.battle-stats.accuracy"
+        value="{{system.battle-stats.accuracy}}"
+        data-dtype="Number"
+        
+      />
+    </div>
+
+    {{! 회피판정 버튼 }}
+    <div class="roll-button">
+      <button type="button" class="rollable" data-action="evasion">회피판정</button>
+      <input
+        type="number"
+        name="system.battle-stats.evasion"
+        value="{{system.battle-stats.evasion}}"
+        data-dtype="Number"
+        
+      />
+    </div>
+
+    {{! 포격판정 버튼 }}
+    <div class="roll-button">
+      <button type="button" class="rollable" data-action="artillery">포격판정</button>
+      <input
+        type="number"
+        name="system.battle-stats.artillery"
+        value="{{system.battle-stats.artillery}}"
+        data-dtype="Number"
+        
+      />
+    </div>
+
+    {{! 방벽판정 버튼 }}
+    <div class="roll-button">
+      <button type="button" class="rollable" data-action="defense">방벽판정</button>
+      <input
+        type="number"
+        name="system.battle-stats.defense"
+        value="{{system.battle-stats.defense}}"
+        data-dtype="Number"
+        
+      />
+    </div>
+
+    {{! 행동력(이니셔티브) 버튼 }}
+    <div class="roll-button">
+      <button type="button" class="rollInitiative" data-action="initiative">행동력</button>
+      <input
+        type="number"
+        name="system.battle-stats.initiative"
+        value="{{system.battle-stats.initiative}}"
+        data-dtype="Number"
+        
+      />
+    </div>
+
+  </section>
+
+  <section class="sheet-stats grid grid-8col">
+    <div class="stat-header grid-span-8">방어수정</div>
+
+    <div class="stat-label">참격</div>
+    <div class="stat-label">관통</div>
+    <div class="stat-label">타격</div>
+    <div class="stat-label">화염</div>
+    <div class="stat-label">얼음</div>
+    <div class="stat-label">번개</div>
+    <div class="stat-label">광휘</div>
+    <div class="stat-label">어둠</div>
+
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.slash.total"
+        value="{{system.defense.slash.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.pierce.total"
+        value="{{system.defense.pierce.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.blunt.total"
+        value="{{system.defense.blunt.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.fire.total"
+        value="{{system.defense.fire.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.ice.total"
+        value="{{system.defense.ice.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.electric.total"
+        value="{{system.defense.electric.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.light.total"
+        value="{{system.defense.light.total}}"
+        
+      />
+    </div>
+    <div class="stat-value">
+      <input
+        type="number"
+        name="system.defense.dark.total"
+        value="{{system.defense.dark.total}}"
+        
+      />
+    </div>
+  </section>
+
   {{! Sheet Tab Navigation }}
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="biography">Biography</a>
+    <a class="item" data-tab="biography">Description</a>
+    <a class="item" data-tab="combats">Combats</a>
+    <a class="item" data-tab="effects">Effects</a>
   </nav>
 
   {{! Sheet Body }}
@@ -54,5 +394,13 @@
       }}
     </div>
 
+    <div class="tab combats" data-group="primary" data-tab="combats">
+      {{> "systems/metallic-guardian/templates/actor/parts/enemy-combats.hbs"}}
+    </div>
+
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/metallic-guardian/templates/actor/parts/actor-effects.hbs"}}
+    </div>
   </section>
+  
 </form>

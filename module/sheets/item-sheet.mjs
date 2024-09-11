@@ -48,6 +48,8 @@ export class MetallicGuardianItemSheet extends ItemSheet {
     // Retrieve the roll data for TinyMCE editors.
     context.rollData = this.item.getRollData();
 
+    context.config = CONFIG.METALLIC_GUARDIAN;
+
     // Add the item's data to context.data for easier access, as well as flags.
     context.system = itemData.system;
     context.flags = itemData.flags;
@@ -60,6 +62,8 @@ export class MetallicGuardianItemSheet extends ItemSheet {
         async: true,
       }),
     };
+
+    console.log("ItemSheet#getData", context.system.attackType);
 
     return context;
   }

@@ -1,0 +1,237 @@
+<!-- 무장1과 무장2 영역 -->
+<section
+  class="weapon-container grid grid-2col"
+  style="gap: 20px; margin-bottom: 20px;"
+>
+  <!-- 무장1 영역 -->
+  <div class="weapon1-container flexcol">
+    <h3>무장1</h3>
+    <div class="flexcol" style="gap: 10px;">
+      <!-- 무장 이름 -->
+      <label>무장 이름</label>
+      <input
+        type="text"
+        name="system.weapon1.name"
+        value="{{system.weapon1.name}}"
+        placeholder="무장 이름"
+      />
+
+      <div class="attack-container grid-2col flexrow">
+        <div>
+          <!-- 공격 타입 -->
+          <label>공격 타입</label>
+          <input
+            type="text"
+            name="system.weapon1.attackType"
+            value="{{system.weapon1.attackType}}"
+            placeholder="공격 타입"
+          />
+        </div>
+        <div>
+          <!-- 공격력 -->
+          <label>공격력</label>
+          <input
+            type="number"
+            name="system.weapon1.damage"
+            value="{{system.weapon1.damage}}"
+            placeholder="공격력"
+          />
+        </div>
+        <div>
+          <!-- 공격 방식 -->
+          <label>공격 방식</label>
+          <input
+            type="text"
+            name="system.weapon1.method"
+            value="{{system.weapon1.method}}"
+            placeholder="공격 방식"
+          />
+        </div>
+        <div>
+          <!-- 크리티컬 값 -->
+          <label>크리티컬 값</label>
+          <input
+            type="number"
+            name="system.weapon1.critical"
+            value="{{system.weapon1.critical}}"
+            placeholder="크리티컬 값"
+          />
+        </div>
+        <div>
+          <!-- 대상 -->
+          <label>대상</label>
+          <input
+            type="text"
+            name="system.weapon1.target"
+            value="{{system.weapon1.target}}"
+            placeholder="대상"
+          />
+        </div>
+        <div>
+          <!-- 사거리 -->
+          <label>사거리</label>
+          <input
+            type="text"
+            name="system.weapon1.range"
+            value="{{system.weapon1.range}}"
+            placeholder="사거리"
+          />
+        </div>
+      </div>
+
+      <!-- 대미지 굴림 버튼 -->
+      <div class="roll-damage-button flexrow">
+        <button type="button" class="rollable roll-weapon1-damage">
+          <i class="fas fa-dice-d20"></i>
+          무장1 대미지 굴림
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 무장2 영역 -->
+  <div class="weapon2-container flexcol">
+    <h3>무장2</h3>
+    <div class="flexcol" style="gap: 10px;">
+      <!-- 무장 이름 -->
+      <label>무장 이름</label>
+      <input
+        type="text"
+        name="system.weapon2.name"
+        value="{{system.weapon2.name}}"
+        placeholder="무장 이름"
+      />
+
+      <div class="attack-container grid-2col flexrow">
+        <div>
+          <!-- 공격 타입 -->
+          <label>공격 타입</label>
+          <input
+            type="text"
+            name="system.weapon2.attackType"
+            value="{{system.weapon2.attackType}}"
+            placeholder="공격 타입"
+          />
+        </div>
+        <div>
+          <!-- 공격력 -->
+          <label>공격력</label>
+          <input
+            type="number"
+            name="system.weapon2.damage"
+            value="{{system.weapon2.damage}}"
+            placeholder="공격력"
+          />
+        </div>
+        <div>
+          <!-- 공격 방식 -->
+          <label>공격 방식</label>
+          <input
+            type="text"
+            name="system.weapon2.method"
+            value="{{system.weapon2.method}}"
+            placeholder="공격 방식"
+          />
+        </div>
+        <div>
+          <!-- 크리티컬 값 -->
+          <label>크리티컬 값</label>
+          <input
+            type="number"
+            name="system.weapon2.critical"
+            value="{{system.weapon2.critical}}"
+            placeholder="크리티컬 값"
+          />
+        </div>
+        <div>
+          <!-- 대상 -->
+          <label>대상</label>
+          <input
+            type="text"
+            name="system.weapon2.target"
+            value="{{system.weapon2.target}}"
+            placeholder="대상"
+          />
+        </div>
+        <div>
+          <!-- 사거리 -->
+          <label>사거리</label>
+          <input
+            type="text"
+            name="system.weapon2.range"
+            value="{{system.weapon2.range}}"
+            placeholder="사거리"
+          />
+        </div>
+      </div>
+
+      <!-- 대미지 굴림 버튼 -->
+      <div class="roll-damage-button flexrow">
+        <button type="button" class="rollable roll-weapon2-damage">
+          <i class="fas fa-dice-d20"></i>
+          무장2 대미지 굴림
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 기존 스킬 목록 -->
+<ol class="items-list">
+  <!-- 스킬 목록 헤더 -->
+  <li class="item grid grid-7col items-header">
+    <div class="item-name grid-span-3">특기</div>
+    <div class="item-name">타이밍</div>
+    <div class="item-name grid-span-2">코스트</div>
+    <div class="item-controls">
+      <a
+        class="item-control item-create"
+        title="Create Skill"
+        data-type="skill"
+      ><i class="fas fa-plus"></i>
+        추가</a>
+    </div>
+  </li>
+
+  <!-- 스킬 목록 출력 -->
+  {{#each skills as |item id|}}
+    <li class="item grid grid-7col" data-item-id="{{item._id}}">
+      <!-- 스킬 이름과 이미지 -->
+      <div class="item-name grid-span-3">
+        <div class="item-image">
+          <a class="view-item" data-item-id="{{item._id}}">
+            <img
+              src="{{item.img}}"
+              title="{{item.name}}"
+              width="24"
+              height="24"
+            />
+          </a>
+        </div>
+        <a class="item-control item-edit">
+          <h4>{{item.name}}</h4>
+        </a>
+      </div>
+
+      <!-- 스킬 타이밍 -->
+      <div class="item-timing">
+        <h4>{{item.system.timing}}</h4>
+      </div>
+
+      <!-- 스킬 체크 타입 (사용 방식) -->
+      <div class="item-cost grid-span-2">
+        <h4>{{item.system.cost}}</h4>
+      </div>
+
+      <!-- 스킬 편집 및 삭제 버튼 -->
+      <div class="item-controls">
+        <a class="item-control item-edit" title="Edit Skill"><i
+            class="fas fa-edit"
+          ></i></a>
+        <a class="item-control item-delete" title="Delete Skill"><i
+            class="fas fa-trash"
+          ></i></a>
+      </div>
+    </li>
+  {{/each}}
+</ol>

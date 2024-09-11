@@ -50,9 +50,6 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     context.system = actorData.system;
     context.flags = actorData.flags;
 
-    // Log the config to ensure it's being passed correctly
-    console.log(context.config); // 로그 확인
-
     context.items = this.actor.items.toObject(); // Fetch all actor's items
 
     // Prepare character data and items.
@@ -188,6 +185,7 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
         subDamage:
           `<${item.system.sub.type}> + ${item.system.sub.damage}` ||
           "부대미지 없음",
+        attackType: item.system["attack-type"] || "장비 안함",
       };
 
       const html = await renderTemplate(dialogTemplate, dialogData);

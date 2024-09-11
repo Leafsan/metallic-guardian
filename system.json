@@ -47,7 +47,7 @@
   "packFolders": [],
   "socket": false,
   "manifest": "https://raw.githubusercontent.com/Leafsan/metallic-guardian/main/system.json",
-  "download": "https://github.com/Leafsan/metallic-guardian/releases/download/test/metallic-guardian.zip",
+  "download": "https://github.com/Leafsan/metallic-guardian/releases/download/alpha/metallic-guardian.zip",
   "background": "systems/metallic-guardian/assets/anvil-impact.png",
   "primaryTokenAttribute": "HP",
   "secondaryTokenAttribute": "FP"

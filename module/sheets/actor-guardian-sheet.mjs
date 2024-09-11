@@ -215,6 +215,7 @@ export class MetallicGuardianGuardianSheet extends ActorSheet {
         subDamage:
           `<${item.system.sub.type}> + ${item.system.sub.damage}` ||
           "부대미지 없음",
+        attackType: item.system["attack-type"] || "장비 안함",
       };
 
       const html = await renderTemplate(dialogTemplate, dialogData);
