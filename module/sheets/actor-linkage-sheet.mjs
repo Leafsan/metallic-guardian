@@ -46,8 +46,12 @@ export class MetallicGuardianLinkageSheet extends ActorSheet {
     const actorData = context.actor;
 
     // Add the actor's data to context.data for easier access, as well as flags.
+    context.config = CONFIG.METALLIC_GUARDIAN;
     context.system = actorData.system;
     context.flags = actorData.flags;
+
+    // Log the config to ensure it's being passed correctly
+    console.log(context.config); // 로그 확인
 
     context.items = this.actor.items.toObject(); // Fetch all actor's items
 

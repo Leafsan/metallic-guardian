@@ -53,7 +53,13 @@
         data-dtype="String"
         />
     </div>
-
+    <!-- 주무장/부무장 드롭다운 -->
+    <div class="stat-label">무장 선택</div>
+    <div class="stat-value">
+      <select>
+        {{selectOptions config.attackType selected="main"}}
+      </select>
+    </div>
     <!-- 주공격 -->
     <div class="grid-span-2 grid-2col">
         <div class="stat-header grid-span-2">주공격</div>

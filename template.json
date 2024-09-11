@@ -262,6 +262,7 @@
         }
       },
       "attack": {
+        "attackType": "main",
         "part": "",
         "main": {
           "type": "",
